@@ -1,0 +1,39 @@
+# Django framework
+Django>=5.0,<6.0
+asgiref==3.9.1
+django-environ==0.12.0
+django-stubs==5.2.2
+django-stubs-ext==5.2.2
+et_xmlfile==2.0.0
+jalali_core==1.0.0
+jdatetime==5.2.0
+mypy==1.17.1
+mypy_extensions==1.1.0
+openpyxl==3.1.5
+pathspec==0.12.1
+# Database
+psycopg==3.2.10
+psycopg-binary==3.2.10
+psycopg2-binary==2.9.10
+python-dotenv==1.1.1
+sqlparse==0.5.3
+types-PyYAML==6.0.12.20250822
+typing_extensions==4.15.0
+tzdata==2025.2
+# Excel/CSV handling
+pandas>=2.2
+openpyxl>=3.1
+xlrd>=2.0
+# For environment variables
+python-dotenv>=1.0
+# For timezone aware datetimes
+pytz
+# For command-line enhancements (اختیاری)
+tabulate
+# اگر بعداً API یا گزارش‌ها خواستی
+djangorestframework>=3.15
+# اگر گزارش PDF بخوای
+reportlab==3.6.12
+xhtml2pdf==0.2.11
+
+
