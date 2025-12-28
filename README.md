@@ -45,5 +45,13 @@ A web-based performance evaluation platform built with Django, designed for mult
 ## Project Management
 Project lifecycle was managed using **Azure DevOps**, including backlog tracking, task breakdown, and release coordination.
 
+## Author
+
+👩‍💻 **Melika Mehranpour**  
+Senior Software Engineer | Backend & Enterprise Systems  
+Python (Django) • ASP.NET Core • PostgreSQL • System Design • Agile
+
+🔗 [LinkedIn]([https://www.linkedin.com/in/melika-mehranpour](https://www.linkedin.com/in/melika-mehranpour-41b627161/)) | [GitHub](https://github.com/MelikaWorks)
+
 ## License
-See `LICENSE.txt` for license information.
+See `LICENSE` for license information.
