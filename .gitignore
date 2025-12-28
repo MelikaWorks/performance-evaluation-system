@@ -1,0 +1,25 @@
+# virtual environments
+venv/
+.venv/
+
+# environment variables
+.env
+
+# python cache
+__pycache__/
+*.pyc
+
+# local database
+db.sqlite3
+
+# generated / local output
+out_core_deps/
+*.rar
+
+# local data files
+employees.xlsx
+employees_normalized.xlsx
+
+# IDE
+.idea/
+.vscode/
