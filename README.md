@@ -42,5 +42,8 @@ A web-based performance evaluation platform built with Django, designed for mult
 - Sensitive data and local artifacts are excluded using `.gitignore`
 - The project follows a clean commit history and modular structure
 
+## Project Management
+Project lifecycle was managed using **Azure DevOps**, including backlog tracking, task breakdown, and release coordination.
+
 ## License
 See `LICENSE.txt` for license information.
