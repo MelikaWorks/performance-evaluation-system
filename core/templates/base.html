@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+{% load static i18n %}
+<html lang="fa" dir="rtl">
+<head>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
+    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rtl.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+    <link rel="stylesheet" href="{% static 'css/admin-override.css' %}">
+    <title></title>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="dashboard">
+<header class="container" style="background:#205067">
+    <h3 style="color:#fff;padding-right:15px;padding-top:10px;">سامانه ارزیابی عملکرد</h3>
+    <small style="color:white;padding-right:15px;padding-top:10px;">نسخه اصلی</small>
+    <div class="user-tools" style="direction: ltr; padding-left: 10px;">
+        {% if request.user.is_authenticated %}
+        <small style="color:#fff;">کاربر: {{ request.user.username }}</small> |
+        <form method="post" action="{% url 'logout' %}" class="logout-form" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="logout-linklike" style="color:#ffc;">خروج</button>
+        </form>
+        | <a href="{% url 'password_change' %}" style="color:#ffc;text-decoration:underline;">تغییر رمز</a>
+        {% else %}
+        <a href="{% url 'login' %}" style="color:#ffc;text-decoration:underline;">ورود</a>
+        {% endif %}
+    </div>
+    <div style="padding-top: 10px;"></div>
+    <div class="clearfix"></div>
+
+    <div style="clear:both"></div>
+</header>
+
+{% if messages %}
+<div class="container">
+    <ul class="messagelist">
+        {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+</body>
+</html>

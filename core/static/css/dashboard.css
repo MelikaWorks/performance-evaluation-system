@@ -1,0 +1,56 @@
+
+    /* جهت و راست‌چین */
+    html { direction: rtl; font-family: "Vazirmatn","IRANSans","Tahoma",sans-serif;  }
+    body { text-align: right; font-family: "Vazirmatn","IRANSans","Tahoma",sans-serif; }
+/* ظرف مرکزی: کل عرض صفحه را پر کن */
+.container-admin {font-family: "Vazirmatn","IRANSans","Tahoma",sans-serif;  width: 100%; max-width: 100%; margin: 0 auto; padding: 0 16px; box-sizing: border-box;}
+
+/* گرید دو ستونه: ستون اصلی کامل + ستون سایدبار */
+.page-grid { display: grid; grid-template-columns: 1fr 360px; gap: 16px; align-items: start; width: 100%; max-width: 100%; box-sizing: border-box; }
+@media (max-width: 768px) { .page-grid { grid-template-columns: 1fr; /* یک ستون در گوشی */ }}
+
+    /* فرم رادیویی تمیز */
+    ul.radiolist, ul.radiolist li { list-style: none; margin: 0; padding: 0; }
+    .radiolist label { display: inline-flex; align-items: center; gap: 6px; }
+    .radiolist input[type="radio"] { order: 0 !important; margin-left: 6px; }
+    .radiolist.inline { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+    fieldset.module .help { display: block; margin-top: 6px; opacity: .75; }
+
+    /* کارت‌های وضعیت (آکاردئون) */
+    details.card { border: 1px solid #e5e7eb; border-radius: 6px; background: #fff; }
+    details.card + details.card { margin-top: 12px; }
+    details.card > summary {
+      list-style: none; cursor: pointer; user-select: none;
+      background: #417690; color: #fff; padding: 10px 12px; border-radius: 6px 6px 0 0;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    details.card[open] > summary { border-bottom: 1px solid #e5e7eb; }
+    details.card .card-body { padding: 12px; }
+    .badge {
+      background: #2e6b8a; color: #fff; border-radius: 999px; padding: 2px 8px; font-size: 12px;
+      margin-inline-start: 8px;
+    }
+    .hdr-link { color: #fff; text-decoration: none; }
+    .hdr-link:hover { text-decoration: underline; }
+
+    /* جدول ساده داخل کارت */
+    .listing { width: 100%; border-collapse: collapse; }
+    .listing th, .listing td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+    .listing th { background: #f8fafc; font-weight: 700; }
+
+     /* عنوان کارت را وادار کن سفید و پررنگ باشد */
+     details.card summary { font-weight: 700; }
+     details.card summary .hdr-link {
+     color: #fff !important;
+     text-decoration: none;
+      display: inline-block;
+     }
+     details.card summary .hdr-link:hover { text-decoration: underline; }
+
+/* لینک‌های داخل لیست Draft / In-Progress */
+.card-body ul li a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}
+

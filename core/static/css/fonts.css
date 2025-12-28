@@ -1,0 +1,42 @@
+/* static/css/fonts.css */
+
+/* Vazirmatn Regular */
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/static/fonts/Vazirmatn/Vazirmatn-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF; /* لاتین + فارسی/عربی */
+}
+
+/* Vazirmatn Medium */
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/static/fonts/Vazirmatn/Vazirmatn-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* Vazirmatn Bold */
+@font-face {
+  font-family: "Vazirmatn";
+  src: url("/static/fonts/Vazirmatn/Vazirmatn-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+0000-00FF, U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* (اختیاری) اگر IRANSans داری، اینجا @font-face هایش را مشابه بالا تعریف کن */
+
+/* یوتیلیتی برای اعداد/حروف لاتین: همیشه لاتین بمانند */
+.latin, .en, .digits-latin, input[type="number"], .code, pre, code, kbd, samp {
+  font-family: Calibri, Tahoma, sans-serif !important;
+  /* اگر فونتت پشتیبانی دارد، اعداد ستون‌بندی‌شده برای تراز جدول‌ها: */
+  font-variant-numeric: tabular-nums;
+  /* (اختیاری) جلوگیری از تغییر فرم محلی اعداد در بعضی مرورگرها: */
+  font-feature-settings: "tnum" 1;
+}

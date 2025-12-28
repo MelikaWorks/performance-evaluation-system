@@ -1,0 +1,157 @@
+{% extends "admin/base_site.html" %}
+{% load static i18n %}
+{% block extrastyle %}
+{{ block.super }}
+<script src="{% static 'js/evaluations_ajax.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/rtl.css' %}">
+<link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+<style>
+    html{direction:rtl} body{text-align:right}
+    .container-admin{max-width:1200px;margin:0 auto;padding:0 16px}
+    .module h2{margin:0 0 8px 0}
+    .listing{width:100%;border-collapse:collapse}
+    .listing th,.listing td{padding:8px 10px;border-bottom:1px solid #eee}
+    .listing th{background:#f8fafc;font-weight:700}
+    .pager{display:flex;gap:8px;justify-content:center;margin-top:12px}
+</style>
+{% endblock %}
+
+{% block usertools %}
+  {% if request.user.is_authenticated %}
+    <div id="user-tools">
+      <span>{% trans "User:" %} {{ request.user.get_username }}</span>
+      | <a href="{% url 'eval_dashboard' %}">{% trans "Dashboard" %}</a>
+      | <form method="post" action="{% url 'logout' %}" class="logout-form">
+          {% csrf_token %}
+          <button type="submit" class="logout-linklike">خروج</button>
+        </form>
+      | <a href="{% url 'password_change' %}">تغییر رمز عبور</a>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main" class="container-admin">
+
+    <form method="get" action="" class="module aligned" style="margin-bottom:12px;">
+        <h2>{{ page_title }}</h2>
+
+        <div class="form-row">
+            <label><strong>فرم:</strong></label>
+            <ul class="radiolist">
+                {% for f in forms %}
+                <li>
+                    <label>
+                        <input type="radio" name="form_code" value="{{ f.code }}" {% if selected_code== f.code
+                               %}checked{% endif %}>
+                        <strong>{{ f.code }}</strong> — {{ f.name }}
+                    </label>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="form-row">
+            <label><strong>بازه:</strong></label>
+            <ul class="radiolist inline">
+                {% for m in month_choices %}
+                <li><label><input type="radio" name="months" value="{{ m }}" {% if months== m %}checked{% endif %}> {{ m
+                    }} ماهه</label></li>
+                {% endfor %}
+            </ul>
+            <p class="help">از {{ period_start }} تا {{ period_end }}</p>
+        </div>
+
+        <div class="submit-row">
+            <input type="submit" class="default" value="اعمال فیلتر">
+            <a class="button" href="{% url 'eval_dashboard' %}">بازگشت به داشبورد</a>
+        </div>
+    </form>
+
+    {% if is_todo %}
+    {% if rows %}
+    <table class="listing">
+        <thead>
+        <tr>
+            <th>کد پرسنلی</th>
+            <th>نام</th>
+            <th>واحد</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for p in rows %}
+        <tr>
+            <td>{{ p.personnel_code }}</td>
+            <td>{{ p.user.get_full_name|default:p.title|default:p.personnel_code }}</td>
+            <td>{{ p.unit.unit_code }}</td>
+            <td>
+                <form method="post" action="{% url 'eval_create' %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="form_code" value="{{ selected_code }}">
+                    <input type="hidden" name="months" value="{{ months }}">
+                    <button name="employee_id" value="{{ p.personnel_code }}" class="button">شروع ارزیابی</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="help">موردی برای انجام نیست.</p>
+    {% endif %}
+    {% else %}
+    {% if rows %}
+    <table class="listing">
+        <thead>
+        <tr>
+            <th>نام</th>
+            <th>فرم</th>
+            <th>بازه</th>
+            <th>امتیاز</th>
+            <th>عملیات</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for e in rows %}
+        <tr>
+            <td>{{ e.employee_name }}</td>
+            <td>{{ e.template.code }} v{{ e.template_version }}</td>
+            <td>{{ e.period_start }} – {{ e.period_end }}</td>
+            <td>
+                {% if e.final_score %}{{ e.final_score }} / {{ e.max_score }}{% else %}-{% endif %}
+            </td>
+            <td>
+                {% if e.status == "draft" %}
+                <a class="button" href="{% url 'eval_edit' e.id %}">ادامه</a>
+                {% elif e.status == "submitted" %}
+                <span class="button disabled">در انتظار تایید</span>
+                {% else %}
+                <span class="button default">تایید شده</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="help">موردی یافت نشد.</p>
+    {% endif %}
+    {% endif %}
+
+    {% if rows and rows.paginator %}
+    <div class="pager">
+        {% if rows.has_previous %} <a class="button"
+                                      href="?form_code={{ selected_code }}&months={{ months }}&page={{ rows.previous_page_number }}">قبلی</a>
+        {% endif %}
+        <span class="button default">{{ rows.number }} / {{ rows.paginator.num_pages }}</span>
+        {% if rows.has_next %}<a class="button"
+                                 href="?form_code={{ selected_code }}&months={{ months }}&page={{ rows.next_page_number }}">بعدی</a>{%
+        endif %}
+    </div>
+    {% endif %}
+
+</div>
+{% endblock %}

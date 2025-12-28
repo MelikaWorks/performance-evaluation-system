@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}فرم‌های من{% endblock %}
+{% block content %}
+  <h2>فرم‌های قابل دسترس برای من</h2>
+
+  {% if not forms %}
+    <p><em>هیچ فرم منتشرشده‌ای برای نقش شما فعال نشده است.</em></p>
+  {% else %}
+    <ul>
+      {% for f in forms %}
+        <li style="margin:6px 0;">
+          <strong>{{f.code}}</strong> — {{f.name}}
+          <a href="{% url 'eval_dashboard' %}?form_code={{ f.code }}" style="margin-right:8px;">ورود به داشبورد این فرم</a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+{% endblock %}

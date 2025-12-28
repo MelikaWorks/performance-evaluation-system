@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>گزارش ارزیابی مدیر</title>
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <style>
+    body { font-family: "B Nazanin", sans-serif; margin: 40px; direction: rtl; }
+    h1, h2, h3 { text-align: center; color: #4B0082; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #999; padding: 8px; text-align: center; }
+    th { background: #eee; }
+    .signatures { margin-top: 60px; display: flex; justify-content: space-between; }
+    .signatures div { width: 22%; text-align: center; border-top: 1px solid #000; padding-top: 5px; }
+    @media print {
+      button { display: none; }
+      @page { size: A4; margin: 20mm; }
+    }
+  </style>
+</head>
+<body>
+  <button onclick="window.print()">🖨 چاپ / PDF</button>
+  <h1>گزارش ارزیابی عملکرد مدیر</h1>
+  <h3>سال: {{ year }}{% if months %} | دوره {{ months }} ماهه{% endif %}</h3>
+
+  <p><strong>تعداد کل فرم‌ها:</strong> {{ stats.total }}</p>
+  <p><strong>میانگین امتیاز:</strong> {{ stats.avg_percent }}%</p>
+
+  <h3>میانگین امتیاز به تفکیک فرم</h3>
+  <table>
+    <tr><th>کد فرم</th><th>میانگین درصد</th></tr>
+    {% for row in by_form %}
+      <tr>
+        <td>{{ row.template__code }}</td>
+        <td>{{ row.avg_percent|floatformat:1 }}%</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="2">داده‌ای برای نمایش وجود ندارد</td></tr>
+    {% endfor %}
+  </table>
+
+  <div class="signatures">
+    <div>مدیر واحد</div>
+    <div>مدیر کارخانه</div>
+    <div>منابع انسانی</div>
+    <div>تأیید نهایی</div>
+  </div>
+</body>
+</html>

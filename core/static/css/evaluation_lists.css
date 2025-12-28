@@ -1,0 +1,270 @@
+/* ============================================================
+   GLOBAL (RTL layout)
+   ============================================================ */
+html { direction: rtl; }
+body { text-align: right; }
+
+.container-admin {
+    max-width: 1250px;
+    margin: 0 auto;
+    padding: 10px 20px;
+}
+h2.page-title {
+    margin: 0 0 15px 0;
+    font-size: 22px;
+    font-weight: bold;
+}
+
+/* ============================================================
+   FILTER BOX
+   ============================================================ */
+.filter-box {
+    padding: 12px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.filter-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+.filter-row label {
+    font-weight: bold;
+}
+.filter-row input,
+.filter-row select {
+    padding: 5px 8px;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    min-width: 160px;
+}
+/* ============================================================
+   TABLE (LISTING VIEW)
+   ============================================================ */
+table.listing {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+}
+table.listing th,
+table.listing td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+table.listing th {
+    background: #f1f5f9;
+    font-weight: 700;
+    white-space: nowrap;
+}
+/* ============================================================
+   STATUS BADGES
+   ============================================================ */
+.badge {
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+.badge.draft      { background: #64748b; }
+.badge.submitted  { background: #0ea5e9; }
+.badge.approved   { background: #10b981; }
+.badge.archived   { background: #475569; }
+
+/* ============================================================
+   TABLE ACTION BUTTONS
+   ============================================================ */
+.actions a {
+    padding: 4px 8px;
+    background: #6366f1;
+    color: #fff !important;
+    border-radius: 6px;
+    font-size: 12px;
+    margin-left: 5px;
+    text-decoration: none;
+}
+.actions a:hover {
+    background: #4f46e5;
+}
+/* ============================================================
+   PAGINATION
+   ============================================================ */
+.pager {
+    display: flex;
+    justify-content: center;
+    margin-top: 18px;
+    gap: 8px;
+}
+.pager a,
+.pager span {
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    font-size: 13px;
+    text-decoration: none;
+}
+.pager .current-page {
+    background: #6366f1;
+    color: #fff;
+    border-color: #6366f1;
+}
+/* ============================================================
+   BACK BUTTON
+   ============================================================ */
+/* ============================================================
+   EVALUATION LISTS — BUTTONS (Clean, Fully Override Admin CSS)
+   ============================================================ */
+
+/* ----- اعمال فیلترها (Primary Button) ----- */
+.button.default {
+    background: #0f6ba7 !important;
+    color: #fff !important;
+    padding: 8px 20px !important;
+    border-radius: 6px !important;
+    border: none !important;
+    font-size: 14px !important;
+    cursor: pointer;
+    display: inline-block;
+}
+.button.default:hover {
+    background: #0c517f !important;
+}
+/* ----- حذف فیلتر (Secondary Button) ----- */
+.button {
+    background: #94a3b8 !important;
+    color: #fff !important;
+    padding: 8px 20px !important;
+    border-radius: 6px !important;
+    border: none !important;
+    font-size: 14px !important;
+    text-decoration: none !important;
+    cursor: pointer;
+}
+.button:hover {
+    background: #6b7280 !important;
+}
+/* ----- دکمه بازگشت (Neutral Button) ----- */
+.btn-back {
+    background: #f7fafc !important;
+    border: 1px solid #cbd5e0 !important;
+    padding: 8px 20px !important;
+    border-radius: 6px !important;
+    font-size: 14px !important;
+    color: #2d3748 !important;
+    text-decoration: none !important;
+    display: inline-block !important;
+}
+.btn-back:hover {
+    background: #e2e8f0 !important;
+    color: #1a202c !important;
+}
+/* Fix unwanted admin button styles */
+.button, .button.default, .btn-back {
+    box-shadow: none !important;
+    background-image: none !important;
+}
+/*==================================================*/
+.filter-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(180px, 1fr));
+    gap: 12px 25px;
+    padding: 5px 0;
+}
+/* هر آیتم: کوچک، جمع‌وجور */
+.filter-row {
+    display: flex;
+    flex-direction: column;
+    max-width: 260px;   /* مهم: کنترل اندازه */
+}
+/* لیبل‌ها کوچک و مرتب */
+.filter-row label {
+    margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #444;
+}
+/* ورودی‌ها: جمع‌وجور */
+.filter-row input,
+.filter-row select {
+    padding: 6px 8px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 14px;
+    width: 100%;
+    max-width: 260px;   /* جلوگیری از کشیدن باکس‌ها */
+}
+/* --------------- Breadcrumb Box --------------- */
+/* نوار breadcrumb */
+.breadcrumbslists {
+    background: var(--breadcrumbs-bg);
+    padding: 10px 40px;
+    color: var(--breadcrumbs-fg);
+    direction: ltr;            /* مهم */
+    text-align: left;         /* تراز کل به چپ */
+    display: flex;
+    justify-content: flex-start; /* همه چیز بچسبه به چپ */
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+/* لینک خانه */
+.breadcrumb-home {
+    color: #6CBFE6 !important;          /* رنگ روشن برای دیده‌شدن روی پس‌زمینه تیره */
+    text-decoration: none;
+    font-weight: 600;
+}
+.breadcrumb-home:hover {
+    color: #ffffff !important;            /* در هاور کاملاً روشن */
+    text-decoration: underline;
+}
+/* جداکننده */
+.breadcrumb-sep {
+    color: #ced7dd;
+    padding: 0 4px;
+}
+/* متن مسیر فعلی */
+.breadcrumb-current {
+    color: #d0d7dd;
+}
+
+.btn-print {
+  color: #6f42c1;
+  border: 1px solid #6f42c1;
+}
+
+.btn-print:hover {
+  background-color: #6f42c1;
+  color: #fff;
+}
+
+.action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 8px;
+    font-size: 13px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-left: 4px;
+}
+
+.action-view {
+    color: #0d6efd;
+}
+
+.action-view:hover {
+    background: rgba(13,110,253,0.1);
+}
+
+.action-print {
+    color: #6f42c1;
+}
+
+.action-print:hover {
+    background: rgba(111,66,193,0.1);
+}

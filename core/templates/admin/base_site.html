@@ -1,0 +1,32 @@
+{% extends "admin/base.html" %}
+{% load i18n static %}
+
+{% block branding %}
+<h1 id="site-name"><a href="#">سامانه ارزیابی عملکرد سازمانی</a></h1>
+<link rel="stylesheet" href="{% static 'css/base_site.css' %}">
+{% endblock %}
+
+{% block userlinks %}
+{% if has_permission %}
+  <a href="{% url 'admin:password_change' %}">{% trans 'Change password' %}</a> |
+  <form method="post" action="{% url 'admin:logout' %}" style="display:inline">
+    {% csrf_token %}
+    <button type="submit" class="logout">{% trans 'Log out' %}</button>
+  </form>
+{% endif %}
+{% endblock %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <!-- این ترتیب ثابت نگه داشته بشه -->
+  <link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/admin-override.css' %}">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <link rel="stylesheet" href="{% static 'css/admin_custom.css' %}">
+{% endblock %}
+
+{% block footer %}
+<footer class="custom-footer" style="text-align:center; margin-top:20px;">
+ {{ COPYRIGHT_FOOTER|safe }}
+</footer>
+{% endblock %}

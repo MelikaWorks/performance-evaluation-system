@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}ورود{% endblock %}
+{% block content %}
+{% load static i18n %}
+
+<link rel="stylesheet" href="{% static 'css/login_form.css' %}">
+<link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+<h2>ورود به سامانه</h2>
+<hr>
+
+{% if form.errors %}
+  <ul class="errorlist"><li>نام کاربری یا رمز عبور نادرست است.</li></ul>
+{% endif %}
+
+<div style="max-width:420px;margin:0 auto;">
+  <form method="post" action="{% url 'login' %}" class="login">
+    {% csrf_token %}
+    <div class="module aligned">
+      <div class="form-row">
+        <label class="required">نام کاربری (شماره پرسنلی)</label>
+        <div>
+          {{ form.username }}
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="required">رمز عبور</label>
+        <div>
+          {{ form.password }}
+        </div>
+      </div>
+    </div>
+    <div class="submit-row">
+      <input type="hidden" name="next" value="{% url 'manager:eval_dashboard' %}">
+      <input type="submit" value="ورود" class="default" style="width:100%">
+    </div>
+  </form>
+</div>
+<footer class="text-center text-muted" style="text-align: center;font-size: 12px; margin-top: 30px;">
+{{ COPYRIGHT_FOOTER|safe }}
+</footer>
+{% endblock %}

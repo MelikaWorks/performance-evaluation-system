@@ -1,0 +1,230 @@
+/* ==========================================================================
+   Evaluation Report Styles (FINAL - matches current HTML classes)
+   Source path in project: reports/static/reports/css/evaluation_report.css
+   Notes:
+   - Keeps original visual system
+   - Adds mappings for .row, .summary-grid/.summary-item, .button, .muted, .hidden, .filter-row, .filter-input
+   - No need to change your HTML template
+   ========================================================================== */
+
+/* --- Reset and Base --- */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: "Vazirmatn", sans-serif;
+  background-color: #f9fafb;
+  color: #111827;
+  margin: 0;
+  padding: 0;
+  line-height: 1.5;
+}
+
+.report-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* --- Typography --- */
+h1, h2, h3 { color: #1f2937; margin-bottom: 1rem; }
+h1 { font-size: 1.75rem; font-weight: 700; }
+h2 { font-size: 1.25rem; font-weight: 600; }
+
+.muted { color: #6b7280; font-size: 0.92rem; }
+
+/* --- Utilities --- */
+.hidden { display: none !important; }
+.er-hidden { display: none !important; }  /* legacy support */
+.er-center { text-align: center; }
+
+/* --- Layout Containers --- */
+/* Original grid layout */
+.er-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+/* Map .row → similar spacing without breaking admin base */
+.row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.5rem; }
+
+/* Summary grid: support both prefixed and unprefixed */
+.er-summary-grid,
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.er-summary-item,
+.summary-item {
+  background-color: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  text-align: center;
+}
+.er-summary-item .label,
+.summary-item .label {
+  display: block;
+  font-size: 0.85rem;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+.er-summary-item .value,
+.summary-item .value {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* --- Report Cards --- */
+.report-card {
+  background-color: #fff;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  border: 1px solid #e5e7eb;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+.report-card h3 {
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+/* --- Tables --- */
+.er-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+.er-table th, .er-table td { border: 1px solid #e5e7eb; padding: 0.75rem 1rem; text-align: left; }
+.er-table th { background-color: #f3f4f6; font-weight: 600; color: #374151; }
+.er-table td { background-color: #fff; }
+
+/* --- Selects / Inputs box --- */
+.unitSelect, .employeeSelect {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.25rem;
+  background: #fff;
+  height:50px;
+}
+#unitSearch, #employeeSearch, .filter-input, input[type="search"] {
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  width: 100%;
+  height:34px;
+}
+
+/* --- Filter Row --- */
+.filter-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.filter-input {
+  min-width: 120px;
+}
+
+/* --- Buttons and Actions --- */
+.actions-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  font-family: "Vazirmatn","IRANSans","Tahoma",sans-serif;
+}
+
+/* Map both .button and .btn + <button> */
+button, .btn, .button {
+  background-color: #4f46e5;
+  color: #fff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.6rem 1rem;
+  cursor: pointer;
+  font-family: "Vazirmatn","IRANSans","Tahoma",sans-serif;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+button:hover, .btn:hover, .button:hover { background-color: #4338ca; }
+button:focus, .btn:focus, .button:focus {
+  outline: 2px solid #111827;
+  outline-offset: 2px;
+  font-family: "Vazirmatn","IRANSans","Tahoma",sans-serif;
+}
+
+/* Toggle group */
+.toggle { text-align: right; display: inline-flex; gap: 6px; }
+.toggle button {
+  background-color: #fff;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.75rem;
+}
+.toggle button:hover { background-color: #f3f4f6; }
+.toggle button.active {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 2px rgba(79,70,229,0.12);
+  color: #111827;
+}
+
+/* --- RTL Support --- */
+body[dir="rtl"] .report-card { direction: rtl; text-align: right; }
+body[dir="rtl"] .er-table th,
+body[dir="rtl"] .er-table td { text-align: right; }
+
+/* --- Responsive --- */
+@media (max-width: 900px){
+  .er-summary-grid, .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .row, .er-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 420px){
+  .er-summary-grid, .summary-grid { grid-template-columns: 1fr; }
+}
+
+/* --- Print / PDF --- */
+@media print {
+  .actions-row, .toggle { display: none !important; }
+  .report-card { border-color: #d1d5db; box-shadow: none; }
+  body { background: white; color: black; }
+}
+
+/* ==== Responsive layout for charts (bar + pie) ==== */
+
+.report-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.report-card {
+  flex: 1;
+  min-width: 45%;
+  text-align: center;
+}
+
+.report-card canvas {
+  max-width: 100%;
+  height: auto !important;
+  margin: 0 auto;
+}
+
+/* 📱 حالت موبایل */
+@media (max-width: 768px) {
+  .report-row {
+    flex-direction: column;
+  }
+
+  .report-card {
+    min-width: 100%;
+  }
+
+  .report-card canvas {
+    height: 220px !important; /* نمودار میله‌ای توی موبایل درست دیده بشه */
+  }
+}
+canvas {
+  width: 100% !important;
+  height: auto !important;
+}

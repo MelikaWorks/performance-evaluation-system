@@ -1,0 +1,150 @@
+{% extends "admin/base_site.html" %}
+{% load static %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/rtl.css' %}">
+<link rel="stylesheet" href="{% static 'css/evaluation_lists.css' %}">
+{% endblock %}
+{% block breadcrumbs %}
+    <div class="breadcrumbslists">
+        <a class="breadcrumb-home" href="/manager/eval/dashboard/">خانه</a>
+        <span class="breadcrumb-sep">›</span>
+        <span class="breadcrumb-current">{{ title }}</span>
+    </div>
+{% endblock %}
+
+{% block content %}
+<div class="container-admin">
+<!--    <h2 class="page-title">{{ title }}</h2>-->
+    <!-- فیلترها -->
+    <form method="get" class="filter-box">
+        <div class="filter-box">
+            <div class="filter-fields">
+                <div class="filter-row">
+                    <label>نام:</label>
+                    <input type="text" name="q_name" value="{{ request.GET.q_name }}">
+                </div>
+                <div class="filter-row">
+                    <label>سال:</label>
+                    <input type="number" name="q_year" value="{{ request.GET.q_year }}">
+                </div>
+                <div class="filter-row">
+                    <label>کد پرسنلی:</label>
+                    <input type="text" name="q_personnel" value="{{ request.GET.q_personnel }}">
+                </div>
+                <div class="filter-row">
+                    <label>فرم:</label>
+                    <select name="q_form">
+                        <option value="">-- همه --</option>
+                        <option value="HR-F-80" {% if request.GET.q_form == "HR-F-80" %} selected{% endif %}>HR-F-80</option>
+                        <option value="HR-F-81" {% if request.GET.q_form == "HR-F-81" %}selected{% endif %}>HR-F-81</option>
+                        <option value="HR-F-82" {% if request.GET.q_form == "HR-F-82" %}selected{% endif %}>HR-F-82</option>
+                        <option value="HR-F-83" {% if request.GET.q_form == "HR-F-83" %}selected{% endif %}>HR-F-83</option>
+                        <option value="HR-F-84" {% if request.GET.q_form == "HR-F-84" %}selected{% endif %}>HR-F-84</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="button default">اعمال فیلترها</button>
+                <a href="?" class="button">حذف فیلتر</a>
+                <a href="{% url 'eval_dashboard' %}" class="btn btn-back">
+                    ⟵ بازگشت به داشبورد
+                </a>
+            </div>
+        </div>
+    </form>
+    <!-- جدول -->
+    {% if object_list %}
+    <table class="table">
+    <thead>
+        <tr>
+            <th>نام</th>
+            <th>کد پرسنلی</th>
+            <th>فرم</th>
+            <th>سال</th>
+            <th>وضعیت</th>
+            <th>عملیات</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for e in object_list %}
+        <tr>
+            <td>{{ e.employee_name }}</td>
+            <td>{{ e.employee_id }}</td>
+            <td>{{ e.template.code }}</td>
+
+            <td>
+                {% if e.period_start %}
+                    {{ e.period_start.year }}
+                {% else %}
+                    ----
+                {% endif %}
+            </td>
+            <td>
+                {% if e.is_archived %}
+                آرشیو
+                {% else %}
+                {{ e.get_status_display }}
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'eval_print_evaluation' e.id %}"
+   class="action-btn action-print" style="
+     display:inline-flex;
+     align-items:center;
+     gap:4px;
+     padding:4px 8px;
+     font-size:13px;
+     border-radius:4px;
+     text-decoration:none;
+     color:#6f42c1;
+     margin-right:6px;
+   "  target="_blank">
+  <i class="bi bi-printer"></i>
+   🖨 پرینت
+</a>
+&nbsp;
+                <a href="{% url 'eval_edit' e.id %}"
+     class="action-btn action-view"
+     title="مشاهده فرم"  style="
+     display:inline-flex;
+     align-items:center;
+     gap:4px;
+     padding:4px 8px;
+     font-size:13px;
+     border-radius:4px;
+     text-decoration:none;
+     color:#0d6efd;">
+    <i class="bi bi-eye"></i>
+    👁 مشاهده
+  </a>
+
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    {% else %}
+    <p class="help">موردی یافت نشد.</p>
+    {% endif %}
+
+    <!-- صفحه‌بندی -->
+    {% if is_paginated %}
+    <div class="pager">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{{ querystring }}">اول</a>
+            <a href="?page={{ page_obj.previous_page_number }}{{ querystring }}">قبلی</a>
+        {% endif %}
+
+        <span class="current-page">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}</span>
+
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{{ querystring }}">بعدی</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{{ querystring }}">آخر</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

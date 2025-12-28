@@ -1,0 +1,51 @@
+/* حذف کامل bullet از UL */
+.menu-list {
+    list-style: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* حذف bullet stubborn از LI */
+.menu-list li {
+    list-style-type: none !important;
+    padding-left: 0 !important;
+    margin-left: 0 !important;
+}
+
+/* حذف marker واقعی در مرورگر */
+.menu-list li::marker {
+    content: "" !important;
+}
+
+.menu-list a {
+    display: flex;
+    align-items: center;
+    gap: 8px;                      /* فاصله بین badge و متن */
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    color: #0a4b78;
+}
+
+.menu-list a:hover {
+    color: #0f6ba7;
+}
+
+.list-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 15px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    padding: 2px 10px;        /* 🔥 بیضی شدن badge */
+    border-radius: 20px;      /* 🔥 کاملاً کپسولی/بیضی */
+}
+
+.badge-draft { background: #F59E0B; }
+.badge-submitted { background: #0ea5e9; }
+.badge-approved { background: #10b981; }
+.badge-archived { background: #6b7280; }
+

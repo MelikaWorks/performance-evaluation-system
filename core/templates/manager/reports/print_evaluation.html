@@ -1,0 +1,103 @@
+<!--print_evaluation.html-->
+<!DOCTYPE html>
+ {% load static %}
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{% static 'css/print.css' %}">
+</head>
+<body>
+
+  <div class="header">
+    <h2>{{ title }}</h2>
+    <button id="printBtn" onclick="window.print()">🖨 چاپ فرم</button>
+  </div>
+
+  <div class="meta">
+    <table class="info-table">
+      <tr>
+        <td><b>کد پرسنلی:</b> {{ ev.employee_id }}</td>
+        <td><b>کد واحد پرسنل:</b> {{ employee_unit }} / <b>کد واحد مدیر:</b> {{ manager_unit }}</td>
+
+        <td><b>دوره:</b> {{ period }}</td>
+      </tr>
+      <tr>
+        <td><b>نام و نام خانوادگی:</b> {{ ev.employee_name }}</td>
+        <td><b>مدیر مستقیم:</b> {{ ev.manager_name }}</td>
+        <td><b>سال:</b> {{ year }}</td>
+      </tr>
+    </table>
+  </div>
+
+
+  <h3 style="margin-top:30px;">جزئیات معیارها</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>ردیف</th>
+        <th>عنوان معیار</th>
+        <th>گزینه انتخاب‌شده</th>
+        <th>امتیاز</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ item.criterion_title }}</td>
+        <td>{{ item.selected_option__label|default:"-" }}</td>
+        <td>{{ item.selected_value }}</td>
+      </tr>
+      {% empty %}
+      <tr><td colspan="4">هیچ داده‌ای برای نمایش وجود ندارد</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p class="summary">
+    جمع امتیاز: {{ ev.final_score }} از {{ ev.max_score }}
+    {% if percent %} ({{ percent }}%) {% endif %}
+  </p>
+
+<hr>
+
+<h4 style="margin-top:30px;">تأییدات</h4>
+<table class="table table-bordered text-center">
+  <thead>
+    <tr>
+      <th>نقش</th>
+      <th>وضعیت</th>
+      <th>تاریخ تأیید</th>
+      <th>تأییدکننده</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for a in approvals %}
+      <tr>
+        <td>{{ a.role }}</td>
+        <td>
+          {% if a.is_approved %}
+            ✓ تأیید شده
+          {% else %}
+            ✗ تأیید نشده
+          {% endif %}
+        </td>
+        <td>
+{{ a.signed_at|date:"Y/m/d" }}
+{% if a.signed_at.hour %}
+  {{ a.signed_at|date:"H:i" }}
+{% endif %}
+
+</td>
+
+        <td>{{ a.signed_by|default:"—" }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+</body>
+</html>

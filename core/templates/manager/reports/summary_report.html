@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-admin" style="padding: 20px 40px !important;">
+    <h2>گزارش تجمیعی مدیران</h2>
+    <!-- فیلترهای اولیه -->
+    <form method="get" class="module aligned" style="margin-bottom: 20px;">
+        <div class="form-row">
+            <label><strong>سال:</strong></label>
+          <select name="year">
+              <option value="">همه سال‌ها</option>
+              {% for y in years %}
+              <option value="{{ y }}">{{ y }}</option>
+              {% endfor %}
+          </select>
+        </div>
+
+        <div class="form-row">
+            <label><strong>فرم:</strong></label>
+            <select name="form_code">
+                <option value="">همه فرم‌ها</option>
+                {% for code in form_choices %}
+                <option value="{{ code }}">{{ code }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="submit-row">
+            <button class="btn btn-primary" type="submit">اعمال فیلتر</button>
+            <a href="{% url 'eval_dashboard' %}" class="btn btn-defult">بازگشت</a>
+        </div>
+    </form>
+
+ <fieldset class="module">
+    <h3>خلاصه گزارش</h3>
+    <ul>
+        <li>کل ارزیابی‌ها: {{ stats.total }}</li>
+        <li>ارسال‌شده: {{ stats.submitted }}</li>
+        <li>تأیید‌شده: {{ stats.approved }}</li>
+        <li>میانگین امتیاز کل: {{ stats.avg_percent }}%</li>
+    </ul>
+
+    {% if stats.total == 0 %}
+        <p class="help">برای این فیلتر هیچ داده‌ای وجود ندارد.</p>
+    {% endif %}
+</fieldset>
+
+    <fieldset class="module">
+    <h3>میانگین امتیاز به تفکیک فرم</h3>
+
+    {% if by_form %}
+        <div style="width: 500px; height: 250px; margin: auto;">
+            <canvas id="chartForm"></canvas>
+        </div>
+    {% else %}
+        <p class="help">در این فیلتر داده‌ای برای نمایش وجود ندارد.</p>
+    {% endif %}
+</fieldset>
+
+<fieldset class="module">
+    <h3>وضعیت ارزیابی‌ها</h3>
+
+    {% if stats.total > 0 %}
+        <div style="width: 400px; height: 250px; margin: auto;">
+            <canvas id="chartPie"></canvas>
+        </div>
+    {% else %}
+        <p class="help">هیچ ارزیابی‌ای در این بازه وجود ندارد.</p>
+    {% endif %}
+</fieldset>
+    <fieldset class="module">
+    <h3>خلاصه عملکرد واحدها</h3>
+
+    {% if unit_summary %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>واحد</th>
+                    <th>کد</th>
+                    <th>کل ارزیابی‌ها</th>
+                    <th>ارسال‌شده</th>
+                    <th>تأیید شده</th>
+                    <th>میانگین نمره</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for u in unit_summary %}
+                <tr>
+                    <td>{{ u.name }}</td>
+                    <td>{{ u.code }}</td>
+                    <td>{{ u.total }}</td>
+                    <td>{{ u.submitted }}</td>
+                    <td>{{ u.approved }}</td>
+                    <td>{{ u.avg_percent }}%</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="help">هیچ واحدی برای نمایش وجود ندارد.</p>
+    {% endif %}
+</fieldset>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script id="by-form-data" type="application/json">{{ by_form_json|safe }}</script>
+<script id="status-pie-data" type="application/json">{{ status_pie_json|safe }}</script>
+
+<script>
+(function () {
+
+  function parseJson(id, fallback) {
+    try {
+      const el = document.getElementById(id);
+      if (!el) return fallback;
+      const txt = (el.textContent || "").trim();
+      if (!txt) return fallback;
+      return JSON.parse(txt);
+    } catch (e) {
+      return fallback;
+    }
+  }
+
+  const byForm = parseJson("by-form-data", []);
+  const pieRaw = parseJson("status-pie-data", {});
+
+  const barLabels = byForm.map(x => x["template__code"] || "—");
+  const barData   = byForm.map(x => Number(x["avg_percent"] || 0));
+
+  const pie = {
+    draft: Number(pieRaw.draft || 0),
+    submitted: Number(pieRaw.submitted || 0),
+    approved: Number(pieRaw.approved || 0),
+  };
+
+  const formCanvas = document.getElementById("chartForm");
+  const pieCanvas  = document.getElementById("chartPie");
+
+  if (formCanvas && barLabels.length) {
+    new Chart(formCanvas, {
+      type: "bar",
+      data: {
+        labels: barLabels,
+        datasets: [{ data: barData, borderRadius: 5 }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: { y: { beginAtZero: true, suggestedMax: 100 } }
+      }
+    });
+  }
+
+  if (pieCanvas && (pie.draft + pie.submitted + pie.approved) > 0) {
+    new Chart(pieCanvas, {
+      type: "doughnut",
+      data: {
+        labels: ["پیش‌نویس", "ارسال‌شده", "تأییدشده"],
+        datasets: [{ data: [pie.draft, pie.submitted, pie.approved] }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: "55%"
+      }
+    });
+  }
+
+})();
+</script>
+
+{% endblock %}

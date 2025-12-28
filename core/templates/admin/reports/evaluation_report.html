@@ -1,0 +1,502 @@
+{% extends "admin/base_site.html" %}
+{%load static%}
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/evaluation_report.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="report-card">
+    <h2>گزارش ارزیابی</h2>
+    <p class="muted">ابتدا واحد را انتخاب کنید. برای گزارش فردی سپس کارمند را انتخاب کنید.</p>
+
+       <div class="filter-group">
+           <label for="orgSelect"><strong>سازمان:</strong></label>
+            <select id="orgSelect" style="width:100%; margin-bottom:12px;" class="form-control">
+                <option value="">انتخاب کنید...</option>
+                {% for org in organizations %}
+                <option value="{{ org.id }}">{{ org.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+    <div class="row">
+
+        <div>
+            <label>واحد</label>
+            <input type="search" id="unitSearch" placeholder="جستجو در واحدها...">
+            <select id="unitSelect" size="8" aria-label="واحد" class="unitSelect"></select>
+            <small class="muted">لیست واحدها به‌صورت خودکار لود می‌شود.</small>
+        </div>
+
+        <div>
+            <div class="toggle" role="tablist" aria-label="حالت گزارش">
+                <button id="modeIndividual" class="active" data-mode="individual">فردی</button>
+                <button id="modeUnit" data-mode="unit">تجمیعی واحد</button>
+            </div>
+
+            <div id="employeeBox" style="margin-top:12px">
+                <label>کارمند (با جستجو)</label>
+                <input type="search" id="employeeSearch" placeholder="جستجو در کارمندان واحد...">
+                <select id="employeeSelect" size="8" aria-label="کارمند" class="employeeSelect"></select>
+                <small class="muted">ابتدا واحد را انتخاب کنید تا لیست کارمندان نمایش داده شود.</small>
+            </div>
+        </div>
+    </div>
+
+<div class="filter-row" style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+<div class="filter-col" style="flex: 1;">
+    <label for="yearSelect">Year:</label>
+    <select id="yearSelect" class="filter-input" style="width:100%; margin-top:4px;">
+      <option value="">All</option>
+    </select>
+  </div>
+
+  <div class="filter-col" style="flex: 1;">
+    <label>دوره:</label>
+    <div id="periodRadios" style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
+      <label><input type="radio" name="period" value="3"> ۳ ماهه</label>
+      <label><input type="radio" name="period" value="6"> ۶ ماهه</label>
+      <label><input type="radio" name="period" value="9"> ۹ ماهه</label>
+      <label><input type="radio" name="period" value="12" checked> ۱۲ ماهه</label>
+    </div>
+  </div>
+</div>
+
+    <div class="actions-row">
+        <button class="button" id="btnDraw">نمایش گزارش</button>
+        <button class="button" id="btnCsv">📊 خروجی CSV</button>
+        <button class="button" id="btnPdf">📄 خروجی PDF</button>
+        <button id="btnPrintForm" class="btn btn-outline-secondary">🖨️ پرینت فرم</button>
+        <span id="status" class="muted"></span>
+    </div>
+</div>
+
+<div class="report-row" style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between; margin-top: 20px;">
+
+  <div class="report-card" style="flex: 1; min-width: 45%; text-align: center;">
+      <h3 id="chartTitle">—</h3>
+      <div style="position: relative;">
+          <canvas id="chartCanvas"></canvas>
+      </div>
+  </div>
+
+  <div class="report-card" style="flex: 1; min-width: 45%; text-align: center;">
+      <h3 id="pieTitle">—</h3>
+      <div style="position: relative; ">
+          <canvas id="pieCanvas"></canvas>
+      </div>
+  </div>
+
+</div>
+
+
+<div class="report-card">
+    <h3>خلاصه</h3>
+    <div class="summary-grid" id="summary">
+        <div class="summary-item">
+            <div class="label">واحد</div>
+            <div class="value" id="smUnit">—</div>
+        </div>
+        <div class="summary-item">
+            <div class="label">کارمند</div>
+            <div class="value" id="smEmployee">—</div>
+        </div>
+        <div class="summary-item">
+            <div class="label">تعداد ارزیابی</div>
+            <div class="value" id="smCount">0</div>
+        </div>
+        <div class="summary-item">
+            <div class="label">میانگین درصد</div>
+            <div class="value" id="smAvg">0</div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  // ---- Endpoints ----
+  const employeesApi = "{% url 'admin:reports_employees_api' %}";
+  const dataApi = "{% url 'admin:reports_data_api' %}";
+
+  // ---- DOM Refs ----
+  const orgSelect = document.getElementById("orgSelect"); //سازمان
+  console.log("ORG:", orgSelect);
+  const unitSelect = document.getElementById("unitSelect");
+  const unitSearch = document.getElementById("unitSearch");
+  const employeeBox = document.getElementById("employeeBox");
+  const employeeSelect = document.getElementById("employeeSelect");
+  const employeeSearch = document.getElementById("employeeSearch");
+  const yearSelect = document.getElementById("yearSelect");
+  const btnDraw = document.getElementById("btnDraw");
+  const btnCsv = document.getElementById("btnCsv");
+  const btnPdf = document.getElementById("btnPdf");
+  const btnPrintForm = document.getElementById("btnPrintForm");
+  const statusEl = document.getElementById("status");
+  const chartTitleEl = document.getElementById("chartTitle");
+  const modeIndividualBtn = document.getElementById("modeIndividual");
+  const modeUnitBtn = document.getElementById("modeUnit");
+  const pieCanvasEl = document.getElementById("pieCanvas");
+  const pieCard = pieCanvasEl ? pieCanvasEl.closest(".report-card") : null;
+
+  let mode = "individual";
+  let lineChart, pieChart;
+
+  // ✅ بازگردانی لیست سال‌ها (از 2025 تا 2020)
+  function populateYears() {
+    if (!yearSelect) return;
+    const currentYear = new Date().getFullYear();
+    yearSelect.innerHTML = '<option value="">All</option>';
+    for (let y = currentYear; y >= 2020; y--) {
+      const opt = document.createElement("option");
+      opt.value = y;
+      opt.textContent = y;
+      yearSelect.appendChild(opt);
+    }
+  }
+  document.addEventListener("DOMContentLoaded", populateYears);
+
+  // ---------- Helpers ----------
+  function filterOptions(input, select) {
+    const q = (input?.value || "").toLowerCase().trim();
+    [...(select?.options || [])].forEach((opt) => {
+      const show = opt.text.toLowerCase().includes(q);
+      opt.classList.toggle("hidden", !show);
+    });
+  }
+
+  function setMode(newMode) {
+    mode = newMode;
+    if (mode === "unit") {
+      modeUnitBtn?.classList.add("active");
+      modeIndividualBtn?.classList.remove("active");
+      if (employeeBox) employeeBox.style.display = "none";
+    } else {
+      modeIndividualBtn?.classList.add("active");
+      modeUnitBtn?.classList.remove("active");
+      if (employeeBox) employeeBox.style.display = "";
+    }
+  }
+
+  function updateSummary(s) {
+    (document.getElementById("smUnit") || {}).textContent = s?.unit || "—";
+    (document.getElementById("smEmployee") || {}).textContent =
+      s?.employee || "—";
+    (document.getElementById("smCount") || {}).textContent = s?.count ?? 0;
+    (document.getElementById("smAvg") || {}).textContent = (
+      (s?.avg ?? 0)
+    ).toFixed(2);
+  }
+
+  // ---------- Charts ----------
+  function drawLine(c) {
+    chartTitleEl.textContent = c?.title || "—";
+    const ctx = document.getElementById("chartCanvas").getContext("2d");
+    if (lineChart) lineChart.destroy();
+
+    lineChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: c?.labels || [],
+        datasets: (c?.datasets || []).map((ds) => ({
+          label: ds.label,
+          data: ds.data,
+          backgroundColor: "#7c3aed99",
+          borderColor: "#7c3aed",
+          borderWidth: 1,
+        })),
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom" },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) {
+                const val = ctx.parsed.y ?? 0;
+                return `${ctx.dataset.label}: ${val.toFixed(2)}%`;
+              },
+            },
+          },
+          datalabels: {
+            anchor: "end",
+            align: "top",
+            formatter: (value) => `${value.toFixed(1)}%`,
+            color: "#4B5563",
+            font: { weight: "bold" },
+          },
+        },
+        scales: {
+          y: { beginAtZero: true, title: { display: true, text: "%" } },
+        },
+      },
+      plugins: [ChartDataLabels],
+    });
+  }
+
+  function drawPie(pie) {
+    if (!pieCanvasEl) return;
+    document.getElementById("pieTitle").textContent = pie?.title || "—";
+    const ctx2 = pieCanvasEl.getContext("2d");
+    if (pieChart) pieChart.destroy();
+
+    const data = pie?.data || [];
+    const total = data.reduce((a, b) => a + b, 0) || 1;
+    pieChart = new Chart(ctx2, {
+      type: "pie",
+      data: {
+        labels: pie?.labels || [],
+        datasets: [
+          {
+            data,
+            backgroundColor: [
+              "#4B70DD",
+              "#5DD39E",
+              "#F4D35E",
+              "#EE964B",
+              "#F95738",
+              "#B56576",
+              "#6C757D",
+            ],
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: { position: "bottom" },
+          tooltip: {
+            callbacks: {
+              label: function (ctx) {
+                const val = ctx.parsed;
+                const pct = ((val / total) * 100).toFixed(1);
+                return `${ctx.label}: ${val} (${pct}%)`;
+              },
+            },
+          },
+        },
+      },
+    });
+  }
+
+   window.addEventListener("resize", () => {
+  clearTimeout(window._chartResizeTimer);
+  window._chartResizeTimer = setTimeout(() => {
+    if (lineChart) {
+      lineChart.resize();
+      lineChart.update();
+    }
+    if (pieChart) {
+      pieChart.resize();
+      pieChart.update();
+    }
+  }, 250);
+});
+
+  // ---------- Loaders ----------
+  function loadEmployees(unitId) {
+    if (!unitId || mode === "unit" || !employeeSelect)
+      return Promise.resolve();
+    statusEl.textContent = "در حال دریافت لیست کارکنان...";
+    return fetch(`${employeesApi}?unit_id=${encodeURIComponent(unitId)}`)
+      .then((r) => r.json())
+      .then((data) => {
+        employeeSelect.innerHTML = "";
+        (data.results || []).forEach((item) => {
+          const opt = document.createElement("option");
+          opt.value = item.id;
+          opt.textContent = item.text;
+          employeeSelect.appendChild(opt);
+        });
+        statusEl.textContent = "";
+      })
+      .catch(() => {
+        statusEl.textContent = "خطا در دریافت کارکنان";
+      });
+  }
+
+  // ---------- Events ----------
+  unitSearch?.addEventListener("input", () =>
+    filterOptions(unitSearch, unitSelect)
+  );
+  employeeSearch?.addEventListener("input", () =>
+    filterOptions(employeeSearch, employeeSelect)
+  );
+
+  // Load units when organization changes
+orgSelect?.addEventListener("change", () => {
+  const orgId = orgSelect.value;
+
+  unitSelect.innerHTML = "";
+  employeeSelect.innerHTML = "";
+
+  if (!orgId) return;
+
+  fetch("{% url 'admin:reports_load_units' %}?org_id=" + orgId)
+    .then((r) => r.json())
+    .then((data) => {
+      (data.units || []).forEach((u) => {
+        const opt = document.createElement("option");
+        opt.value = u.id;
+        opt.textContent = u.name;
+        unitSelect.appendChild(opt);
+      });
+    })
+    .catch((err) => console.error("خطا در لود واحدها:", err));
+});
+
+
+  modeIndividualBtn?.addEventListener("click", () => setMode("individual"));
+  modeUnitBtn?.addEventListener("click", () => setMode("unit"));
+
+  // preload units
+<!--  fetch(window.location.pathname + "?format=units")-->
+<!--    .then((r) => (r.ok ? r.json() : Promise.reject()))-->
+<!--    .then((data) => {-->
+<!--      (data.units || []).forEach((u) => {-->
+<!--        const opt = document.createElement("option");-->
+<!--        opt.value = u.id;-->
+<!--        opt.textContent = u.name;-->
+<!--        unitSelect?.appendChild(opt);-->
+<!--      });-->
+<!--    })-->
+<!--    .catch(() => {});-->
+
+  unitSelect?.addEventListener("change", async () => {
+    const unitId = unitSelect.value;
+    await loadEmployees(unitId);
+    // سال‌ها دوباره بازسازی بشن بعد از انتخاب واحد
+    populateYears();
+  });
+
+  // ---------- Ajax Draw ----------
+  btnDraw?.addEventListener("click", () => {
+    const unitId = unitSelect?.value;
+    if (!unitId) {
+      statusEl.textContent = "واحد را انتخاب کنید.";
+      return;
+    }
+    const params = new URLSearchParams({ mode, unit_id: unitId });
+    const year = yearSelect?.value;
+    const period = document.querySelector('input[name="period"]:checked')?.value;
+    if (year) params.set("year", year);
+    if (period) params.set("period", period);
+
+    if (mode === "individual") {
+      const empId = employeeSelect?.value;
+      if (!empId) {
+        statusEl.textContent = "کارمند را انتخاب کنید.";
+        return;
+      }
+      params.set("employee_id", empId);
+    }
+
+    statusEl.textContent = "در حال دریافت داده‌ها...";
+    fetch(`${dataApi}?${params.toString()}`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
+      .then((payload) => {
+        statusEl.textContent = "";
+        updateSummary(payload.summary || {});
+        if (payload.chart) drawLine(payload.chart);
+        if (pieCard) {
+          if (payload.pie && Array.isArray(payload.pie.data) && payload.pie.data.length) {
+            pieCard.style.display = "";
+            drawPie(payload.pie);
+          } else {
+            pieCard.style.display = "none";
+          }
+        }
+      })
+      .catch((err) => {
+        console.error("❌ خطا در دریافت داده‌ها:", err);
+        statusEl.textContent = "خطا در دریافت داده‌ها (جزئیات در Console)";
+      });
+  });
+
+  // ---------- CSV Export ----------
+  if (btnCsv) {
+    btnCsv.addEventListener("click", () => {
+      const unitId = unitSelect?.value;
+      if (!unitId) {
+        alert("واحد را انتخاب کنید.");
+        return;
+      }
+      const params = new URLSearchParams({ mode, unit_id: unitId });
+      const year = yearSelect?.value;
+      const period = document.querySelector('input[name="period"]:checked')?.value;
+      if (year) params.set("year", year);
+      if (period) params.set("period", period);
+      if (mode === "individual") {
+        const empId = employeeSelect?.value;
+        if (!empId) {
+          alert("کارمند را انتخاب کنید.");
+          return;
+        }
+        params.set("employee_id", empId);
+      }
+      window.open(`/admin/core/evaluationreport/export/csv/?${params.toString()}`, "_blank");
+    });
+  }
+
+  // ---------- Print Form ----------
+  if (btnPrintForm) {
+    btnPrintForm.addEventListener("click", () => {
+      const empId = employeeSelect?.value;
+      const unitId = unitSelect?.value;
+      const year = yearSelect?.value;
+      const period = document.querySelector('input[name="period"]:checked')?.value;
+
+      if (!empId || !unitId) {
+        alert("ابتدا واحد و کارمند را انتخاب کنید.");
+        return;
+      }
+      const params = new URLSearchParams({
+        mode: "individual",
+        unit_id: unitId,
+        employee_id: empId,
+      });
+      if (year) params.set("year", year);
+      if (period) params.set("period", period);
+
+      // آدرس پرینت
+      window.open("{% url 'admin:reports_print_form' %}?" + params.toString(), "_blank");
+    });
+  }
+
+  // ---------- PDF Export ----------
+  if (btnPdf) {
+    btnPdf.addEventListener("click", () => {
+      const unitId = unitSelect?.value;
+      if (!unitId) {
+        alert("واحد را انتخاب کنید.");
+        return;
+      }
+      const params = new URLSearchParams({ mode, unit_id: unitId });
+      const year = yearSelect?.value;
+      const period = document.querySelector('input[name="period"]:checked')?.value;
+      if (year) params.set("year", year);
+      if (period) params.set("period", period);
+      if (mode === "individual") {
+        const empId = employeeSelect?.value;
+        if (!empId) {
+          alert("کارمند را انتخاب کنید.");
+          return;
+        }
+        params.set("employee_id", empId);
+      }
+      window.open(`/admin/core/evaluationreport/export/pdf/?${params.toString()}`, "_blank");
+    });
+  }
+
+  // Default mode
+  setMode("individual");
+});
+</script>
+
+{% endblock %}

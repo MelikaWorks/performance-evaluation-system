@@ -1,0 +1,43 @@
+/* ================== admin-override.css ==================
+   این فایل فونت پیش‌فرض پنل ادمین جنگو را به Vazirmatn تغییر می‌دهد.
+   باید بعد از base.css (و بعد از fonts.css) لود شود.
+========================================================= */
+
+/* تم روشن */
+:root,
+html[data-theme="light"] {
+  --font-family-primary: "Vazirmatn", "Tahoma", sans-serif;
+}
+
+/* تم تیره (در صورت فعال بودن) */
+html[data-theme="dark"] {
+  --font-family-primary: "Vazirmatn", "Tahoma", sans-serif;
+}
+
+/* برای المان‌های تک‌خطی یا عددی در ادمین، اعداد را لاتین نگه می‌داریم */
+.en, .digits-latin, input[type="number"], code, pre, kbd, samp {
+  font-family: Calibri, Tahoma, sans-serif !important;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+.custom-footer {
+  text-align: center;
+  font-size: 13px;
+  color: #555;
+  margin-top: 40px;
+  padding: 15px 0 10px;
+  border-top: 1px solid #e4e4e4;
+  background: #fafafa;
+}
+
+.custom-footer .footer-link {
+  color: #417893; /* آبی روشن و خوانا */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.custom-footer .footer-link:hover {
+  text-decoration: underline;
+  color: #036; /* آبی تیره‌تر هنگام hover */
+}

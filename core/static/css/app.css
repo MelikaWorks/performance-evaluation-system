@@ -1,0 +1,45 @@
+/* جهت کلی */
+html[dir="rtl"] body { text-align: right; }
+
+/* ظرف صفحه */
+.container { max-width: 980px; margin: 0 auto; }
+
+/* کارت‌های انتخاب فرم */
+.radio-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 12px;
+  margin: 8px 0 16px 0;
+}
+.radio-card { display: flex; gap: 8px; align-items: flex-start; cursor: pointer; }
+.radio-card input { margin-top: 4px; }
+
+/* خودِ جعبهٔ کارت */
+.radio-card .box {
+  border: 1px solid #e5e7eb; background: #fff; border-radius: 8px;
+  padding: 8px 12px; width: 100%;
+}
+.radio-card .title { font-weight: 700; }
+.radio-card .sub { opacity: .8; font-size: 90%; margin-top: 2px; }
+.radio-card .meta { opacity: .7; font-size: 85%; margin-top: 4px; }
+
+/* حالت انتخاب‌شده */
+.radio-card input:checked + .box {
+  border-color: #9ec5fe;
+  box-shadow: inset 0 0 0 2px #9ec5fe;
+}
+
+/* قرص‌های انتخاب بازه */
+.pills { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+.pills label { display: inline-flex; gap: 6px; align-items: center; }
+.pills small { opacity: .7; }
+
+/* باکس‌های لیست‌ها */
+.module { border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin: 12px 0; background:#fff; }
+.module h3 { margin: 0 0 8px 0; font-size: 1.05rem; }
+.empty { opacity: .7; font-style: italic; }
+
+/* جدول‌ها */
+.table { width: 100%; border-collapse: collapse; }
+.table th, .table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+.table th { background: #f8fafc; font-weight: 700; text-align:inherit; }

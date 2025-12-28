@@ -1,0 +1,185 @@
+<!--
+Status: Stable
+Workflow v1 locked
+Next steps: optional (links / signatures)
+-->
+{% extends "admin/base_site.html" %}
+{% load static i18n %}
+{% block extrastyle %}
+{{ block.super }}
+<script src="{% static 'core/evaluations_ajax.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+<link rel="stylesheet" href="{% static 'css/rtl.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard_lists.css' %}">
+
+{% endblock %}
+{% block usertools %}
+{% if request.user.is_authenticated %}
+<div id="user-tools">
+    <span>{% trans "User:" %} {{ request.user.get_username }}</span>
+    | <a href="{% url 'eval_dashboard' %}">{% trans "Dashboard" %}</a>
+    |
+    <form method="post" action="{% url 'logout' %}" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="logout-linklike">خروج</button>
+    </form>
+    | <a href="{% url 'password_change' %}">تغییر رمز عبور</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:16px; margin-top:24px;">
+
+    {% if selected_code and months %}
+    <a href="{% url 'eval_dashboard' %}?form_code={{ selected_code }}&months={{ months }}"
+       style="text-decoration:none; color:inherit;">
+        {% else %}
+        <a href="{% url 'eval_dashboard' %}"
+           style="text-decoration:none; color:inherit;">
+            {% endif %}
+            <div class="card">
+                <h3>در حال ارزیابی مدیر واحد</h3>
+                <strong style="font-size:24px;">
+                    {{ manager_count|default:"0" }}
+                </strong>
+                <div style="font-size:12px; color:#777; margin-top:4px;">
+                    مورد
+                </div>
+            </div>
+        </a>
+    </a>
+
+    {% if selected_code and months %}
+    <a href="{% url 'eval_dashboard' %}?form_code={{ selected_code }}&months={{ months }}"
+       style="text-decoration:none; color:inherit;">
+        {% else %}
+        <a href="{% url 'eval_dashboard' %}"
+           style="text-decoration:none; color:inherit;">
+            {% endif %}
+            <div class="card">
+                <h3>در حال بررسی منابع انسانی</h3>
+                <strong style="font-size:24px;">
+                    {{ hr_count|default:"0" }}
+                </strong>
+                <div style="font-size:12px; color:#777; margin-top:4px;">
+                    مورد
+                </div>
+            </div>
+        </a>
+    </a>
+
+    {% if selected_code and months %}
+    <a href="{% url 'eval_dashboard' %}?form_code={{ selected_code }}&months={{ months }}"
+       style="text-decoration:none; color:inherit;">
+        {% else %}
+        <a href="{% url 'eval_dashboard' %}"
+           style="text-decoration:none; color:inherit;">
+            {% endif %}
+            <div class="card" >
+                <h3>در حال بررسی مدیر کارخانه</h3>
+                <strong style="font-size:24px;">
+                    {{ factory_count|default:"0" }}
+                </strong>
+                <div style="font-size:12px; color:#777; margin-top:4px;">مورد</div>
+            </div>
+        </a>
+    </a>
+
+    <div class="card">
+        <h3>ارزیابی‌های تأیید نهایی‌شده</h3>
+        <strong style="font-size:24px;">
+            {{ final_count|default:"0" }}
+        </strong>
+        <div style="font-size:12px; color:#777; margin-top:4px;">
+            مورد
+        </div>
+    </div>
+
+</div>
+<br>
+
+<div class="card" style="padding:16px;">
+{% if hr_list %}
+<div class="card" style="margin-top:24px;">
+    <h3>فرم‌های در انتظار بررسی HR</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>پرسنل</th>
+                <th>واحد</th>
+                <th>فرم</th>
+                <th>اقدام</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in hr_list %}
+            <tr>
+                <td>{{ item.ev.employee_name }}</td>
+                <td>{{ item.ev.unit_name }}</td>
+                <td>{{ item.ev.template.code }}</td>
+                <td>
+
+                       <a href="{% url 'eval_edit' item.ev.id %}"
+                           class="btn btn-sm btn-primary" style="color: #fff">
+                            بررسی
+                        </a>
+
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+
+{% if factory_list %}
+<div class="card" style="margin-top:24px;">
+    <h3>فرم‌های در انتظار تأیید نهایی مدیر کارخانه</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>پرسنل</th>
+                <th>واحد</th>
+                <th>فرم</th>
+                <th>اقدام</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in factory_list %}
+            <tr>
+                <td>{{ item.ev.employee_name }}</td>
+                <td>{{ item.ev.unit_name }}</td>
+                <td>{{ item.ev.template.code }}</td>
+                <td>
+                    <form method="post"
+                          action="{% url 'manager:eval_factory_approve' item.ev.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-success">
+                            تأیید نهایی
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endif %}
+
+</div>
+{% endblock %}
+
+
+
+
+
+
+

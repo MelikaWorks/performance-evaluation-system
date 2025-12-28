@@ -1,0 +1,8 @@
+{% if can_approve %}
+<form action="{% url 'approve_evaluation' evaluation.id %}" method="post" style="display:inline;">
+    {% csrf_token %}
+    <button class="btn btn-success btn-sm">
+        ✔ تأیید مرحله
+    </button>
+</form>
+{% endif %}

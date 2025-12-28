@@ -1,0 +1,89 @@
+body {
+  font-family: "Vazir", sans-serif;
+  direction: rtl;
+  margin: 40px;
+  color: #111;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+h2 {
+  color: #7c3aed;
+  text-align: center;
+  margin: 10px 0 0 0;
+}
+button#printBtn {
+  background: #7c3aed;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+}
+button#printBtn:hover {
+  background: #5b21b6;
+}
+.meta {
+  text-align: right;
+  line-height: 1.8;
+  margin-top: 15px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 25px;
+}
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+  font-size: 13px;
+}
+th {
+  background-color: #f3f3f3;
+  font-weight: bold;
+}
+.summary {
+  text-align: left;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.signatures {
+  display: flex;
+  justify-content: space-between;
+  text-align: center;
+  margin-top: 50px;
+  font-size: 14px;
+}
+.sign-box {
+  width: 22%;
+  border-top: 1px solid #333;
+  padding-top: 5px;
+}
+@media print {
+  #printBtn { display: none; }
+  body { margin: 10mm; }
+}
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  font-size: 14px;
+}
+.info-table td {
+  border: 1px solid #ccc;
+  padding: 8px 10px;
+  vertical-align: middle;
+  width: 33%;
+}
+.info-table b {
+  color: #4b5563;
+  font-weight: 600;
+}
+@font-face {
+  font-family: 'Vazir';
+  src: url('../fonts/Vazir.woff2') format('woff2');
+}

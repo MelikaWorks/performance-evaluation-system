@@ -1,0 +1,12 @@
+.logout {
+    background: none;
+    padding: 0;
+    cursor: pointer;
+    color: #fff;
+    border-width: 0 0 1px 0;
+    border-color: #fff;
+    border-style: groove;
+  }
+  .dashboard #content {
+    width: auto;
+}

@@ -1,0 +1,216 @@
+/* ================== styles.css (cleaned & consolidated) ==================
+   - Load fonts.css BEFORE this file (Vazirmatn @font-face).
+   - Global font via --font. Control sizes via --control-*.
+   - One unified Latin/Numbers utility block (no duplicates).
+   =============================================================== */
+
+/* ============== پایه ============== */
+:root{
+  --bg:#fafafa;
+  --card:#ffffff;
+  --ink:#222;
+  --muted:#666;
+  --line:#e2e2ea;
+  --brand:#3d47ff;
+  --brand-weak:#eef2ff;
+  --danger:#d32f2f;
+  --shadow:0 8px 30px rgba(0,0,0,.06);
+  --radius:14px;
+  --radius-sm:10px;
+  --space:1rem;
+
+  /* Global font */
+  --font:"Vazirmatn","Tahoma",sans-serif;
+  --mono:"Cascadia Mono","Consolas",monospace;
+
+  /* Controls (decouple UI height from typography) */
+  --control-h: 40px;
+  --control-px: 10px;
+  --control-fs: 14px;
+}
+
+html{scroll-behavior:smooth;}
+body{
+  direction:rtl;
+  background:var(--bg);
+  color:var(--ink);
+  font-family: var(--font);
+  /*line-height:1.9;*/
+  margin: 0;
+}
+
+.container{ /* reserved for future layout */ }
+
+/* ============== اعداد/لاتین (یکپارچه) ============== */
+.en, .latin, .digits-latin,
+input[type="number"], .code, pre, code, kbd, samp,
+td[data-type="number"], th[data-type="number"], .table .col--number {
+  font-family: Calibri, Tahoma, sans-serif !important;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  direction: ltr;
+  text-align: left;
+}
+
+.container{
+  padding-top: .1rem;
+}
+/* ============== نوار بالایی ============== */
+.topbar{
+  background:#2f5f76;
+  color:#fff;
+  padding: 10px 40px;
+}
+.topbar__inner{max-width:980px;margin:0 auto;padding:.6rem 1rem;}
+.topbar__nav{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;}
+.topbar__link{color:#fff;text-decoration:none;font-weight:600}
+.topbar__link:hover{text-decoration:underline;opacity:.95;}
+.topbar__sep{opacity:.7}
+.topbar__user{opacity:.9}
+
+/* ============== کارت و بخش‌ها ============== */
+.card{
+  background:var(--card);
+  box-shadow:var(--shadow);
+  padding:1.30rem;
+}
+
+/* ============== فرم‌ها (قد ثابت) ============== */
+.label{display:block;margin-bottom:.35rem;color:#111;}
+.form-group{margin-bottom:.9rem;}
+
+/* پایهٔ کنترل‌ها */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="tel"],
+select,
+textarea {
+  box-sizing: border-box;
+  height: var(--control-h);
+  padding: 0 var(--control-px);
+  font-size: var(--control-fs);
+  line-height: calc(var(--control-h) - 2px);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background:#fff;
+  outline: 0;
+}
+
+/* textarea: آزاد برای چند خط */
+textarea {
+  min-height: 120px;
+  height: auto;
+  line-height: 1.6;
+  padding: .65rem .8rem;
+  resize: vertical;
+}
+
+/* select: ظاهر یکنواخت + جا برای فلش در RTL */
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  padding-inline-end: calc(var(--control-px) + 14px);
+  background-image: linear-gradient(45deg, transparent 50%, #888 50%),
+                    linear-gradient(135deg, #888 50%, transparent 50%),
+                    linear-gradient(to right, #ccc, #ccc);
+  background-position: calc(100% - 12px) 50%, calc(100% - 7px) 50%, calc(100% - 28px) 50%;
+  background-size: 5px 5px, 5px 5px, 1px 60%;
+  background-repeat: no-repeat;
+}
+
+input:focus, select:focus, textarea:focus{
+  border-color: var(--brand);
+  box-shadow: 0 0 0 3px var(--brand-weak);
+}
+
+/* سایزبندی اختیاری کنترل‌ها */
+.control-sm { --control-h: 32px; --control-fs: 13px; --control-px: 8px; }
+.control-md { --control-h: 40px; --control-fs: 14px; --control-px: 10px; } /* پیش‌فرض */
+.control-lg { --control-h: 48px; --control-fs: 15px; --control-px: 12px; }
+
+/* ============== دکمه‌ها ============== */
+.btn{
+  display:inline-block;border:0;border-radius:var(--radius-sm);
+  padding:.6rem 1rem;cursor:pointer;font-weight:600;
+}
+.btn-primary{background:#205067;color:#fff;}
+.btn-primary:hover{filter:brightness(0.95);}
+.btn-danger{background:var(--danger);color:#fff;}
+.btn-link{color:var(--brand);}
+.btn-link:hover{text-decoration:underline;}
+
+/* ============== دکمه خروج شبیه لینک ============== */
+.logout-form{display:inline;margin:0;}
+.logout-linklike{
+  background:none;border:0;padding:0;margin:0;
+  font:inherit;color:#fff;cursor:pointer;
+}
+.logout-linklike:hover{text-decoration:underline;opacity:.95}
+
+/* ============== اخطار/پیام ============== */
+.alert{border-radius:var(--radius-sm);padding:.8rem 1rem;margin:.8rem 0;}
+.alert-danger{background:#ffe5e5;border:1px solid #ffc9c9;color:#a80000;}
+.alert-info{background:#eef6ff;border:1px solid #d7e7ff;color:#0b519e}
+
+/* ============== جدول‌ها ============== */
+.table{
+  width:100%;border-collapse:collapse;background:#fff;
+  border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);
+}
+.table th,.table td{border-bottom:1px solid var(--line);padding:.7rem .8rem;text-align:right;}
+.table th{background:#f7f7fb;font-weight:700}
+
+/* ============== کمک‌های کوچک ============== */
+.text-center{text-align:center;}
+.mt-2{margin-top:.5rem}.mt-3{margin-top:1rem}.mt-4{margin-top:1.5rem}
+.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:1rem}.mb-4{margin-bottom:1.5rem}
+.w-100{width:100%}
+.clearfix { clear: both; }
+
+/* ============== فرم ارزیابی عملکرد ============== */
+.eval-header { margin: 1rem 0 1.5rem; }
+.eval-title { font-size: 1.3rem; font-weight: 700; color: #111; }
+.eval-meta { margin-top: .3rem; color: var(--muted); font-size: .9rem; }
+.eval-meta strong { color: var(--brand); }
+
+/* کارت اصلی */
+.eval-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+.eval-list { list-style: decimal inside; padding: 0; margin: 0; }
+.eval-item { margin-bottom: 1rem; padding-bottom: .8rem; border-bottom: 1px dashed var(--line); }
+.eval-item:last-child { border-bottom: 0; }
+
+/* گزینه‌ها */
+.eval-options { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: .5rem; }
+.eval-option {
+  display: flex; align-items: center; gap: .35rem;
+  padding: .4rem .6rem; border: 1px solid var(--line);
+  border-radius: var(--radius-sm); background: #fff; cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.eval-option:hover { border-color: var(--brand); background: var(--brand-weak); }
+.eval-option input[type="radio"] { accent-color: var(--brand); margin: 0; width: 16px; height: 16px; }
+.eval-option span { font-weight: 600; }
+.eval-option small { color: var(--muted); font-size: .85rem; }
+
+/* توضیح زیر هر سوال */
+.eval-desc {
+  margin: .25rem 0 .75rem;
+  color: var(--muted);
+  font-size: .9rem;
+  line-height: 1.6;
+  padding-inline-start: .5rem;
+}
+
+/* دکمه‌های فرم ارزیابی */
+.eval-actions { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; }
+.btn-approve { background: #16a34a; color: #fff; }
+.btn-approve:hover { filter: brightness(.95); }

@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% load static %}
+{% block extra_head %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/manager_reports.css' %}">
+<link rel="stylesheet" href="{% static 'css/chartsmanager.css' %}">
+
+{% endblock %}
+
+{% block content %}
+
+<div class="report-layout">
+
+  <!-- ستون راست: فیلترها -->
+  <div class="report-filters">
+
+    <form method="get" action="{% url 'eval_reports' %}" class="module aligned">
+
+      <!-- دوره -->
+      <div class="form-row">
+        <label><strong>سال:</strong></label>
+        <select name="year">
+          {% for y in years %}
+            <option value="{{ y }}" {% if y == year %}selected{% endif %}>{{ y }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-row">
+        <label><strong>بازهٔ ماهانه:</strong></label>
+        <ul class="radiolist inline">
+          {% for m in month_choices %}
+            <li>
+              <label>
+                <input type="radio" name="months" value="{{ m }}" {% if months == m %}checked{% endif %}>
+                {{ m }} ماهه
+              </label>
+            </li>
+          {% endfor %}
+          <li>
+            <label>
+              <input type="radio" name="months" value="" {% if not months %}checked{% endif %}>
+              غیرفعال (بر اساس سال)
+            </label>
+          </li>
+        </ul>
+      </div>
+
+      <!-- انتخاب واحد: فقط مدیر کارخانه -->
+      {% if units %}
+<div class="form-row">
+  <label><strong>واحد:</strong></label>
+  <select name="unit_id" onchange="this.form.submit()">
+    <option value="">— انتخاب واحد —</option>
+    {% for u in units %}
+      <option value="{{ u.id }}"
+        {% if selected_unit_id and u.id|stringformat:"s" == selected_unit_id %}selected{% endif %}>
+        {{ u.name }}
+      </option>
+    {% endfor %}
+  </select>
+</div>
+{% endif %}
+
+
+      <!-- انتخاب پرسنل -->
+     <div class="form-row">
+  <label><strong>پرسنل:</strong></label>
+  <select name="employee_id">
+    <option value="">— همه پرسنل —</option>
+    {% for emp in employees %}
+      <option value="{{ emp.personnel_code }}"
+        {% if employee_id and emp.personnel_code|stringformat:"s" == employee_id %}selected{% endif %}>
+        {{ emp.full_name }}
+      </option>
+    {% endfor %}
+  </select>
+</div>
+
+
+      <div class="submit-row">
+        <button type="submit" class="btn btn-primary">اعمال فیلتر</button>
+        <a href="{% url 'eval_dashboard' %}" class="btn btn-defult" style="margin-right:10px;">
+          بازگشت به داشبورد
+        </a>
+      </div>
+
+    </form>
+
+  </div>
+<style>
+/* ===== فیکس قطعی Chart.js ===== */
+
+/* والد نمودار */
+.chart-wrapper {
+  position: relative;
+  height: 260px;       /* ارتفاع واقعی */
+  width: 100%;
+}
+
+/* خود canvas */
+.chart-wrapper canvas {
+  display: block;
+  height: 100% !important;
+  width: 100% !important;
+}
+
+/* مخصوص Pie (اگر Flex یا Grid داری) */
+#chartPie {
+  max-height: 260px;
+}
+
+/* اگر chart-box فلکس است */
+.chart-box {
+  overflow: visible;
+}
+</style>
+
+  <!-- ستون چپ: نمودارها -->
+  <div class="report-charts">
+
+    <div class="charts-layout">
+
+      <!-- نمودار میله‌ای (ستون راست داخل نمودارها) -->
+      <fieldset class="module chart-box">
+        <h3>میانگین امتیاز پرسنل در بازه انتخابی</h3>
+        <div class="chart-wrapper">
+          <canvas id="chartForm"></canvas>
+          <canvas id="chartAverage"></canvas>
+        </div>
+      </fieldset>
+
+      <!-- نمودار دایره‌ای (ستون چپ داخل نمودارها) -->
+      <fieldset class="module chart-box">
+        <h3>وضعیت ارزیابی‌ها</h3>
+        <div class="chart-wrapper" style="height:260px" >
+         <canvas id="chartPie" style="height:260px !important; width:260px;"></canvas>
+
+        </div>
+      </fieldset>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- داده‌ها به صورت JSON امن -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="by-form-data" type="application/json">{{ by_form_json|safe }}</script>
+<script id="status-pie-data" type="application/json">{{ status_pie_json|safe }}</script>
+<script id="avg-data" type="application/json">
+  {{ avg_percent|default:0 }}
+</script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+  function parseJson(id, fallback) {
+    try {
+      const el = document.getElementById(id);
+      if (!el) return fallback;
+      const txt = (el.textContent || "").trim();
+      if (!txt) return fallback;
+      return JSON.parse(txt);
+    } catch (e) {
+      console.warn("JSON parse error:", id, e);
+      return fallback;
+    }
+  }
+
+  if (!window.Chart) {
+    console.error("Chart.js not loaded");
+    return;
+  }
+
+  Chart.defaults.devicePixelRatio = 2;
+
+  // ===== داده‌ها =====
+  const avg = Number(parseJson("avg-data", 0)) || 0;
+  const pieRaw = parseJson("status-pie-data", {});
+
+  const pieVals = [
+    Number(pieRaw.draft || 0),
+    Number(pieRaw.submitted || 0),
+    Number(pieRaw.approved || 0),
+  ];
+
+  // ===== canvasها =====
+  const avgCanvas = document.getElementById("chartForm");
+  const pieCanvas = document.getElementById("chartPie");
+
+  // ===== نمودار میانگین =====
+  if (avgCanvas) {
+    new Chart(avgCanvas, {
+      type: "bar",
+      data: {
+        labels: ["میانگین عملکرد"],
+        datasets: [{
+          data: [avg],
+          backgroundColor: "#7c3aed",
+          borderRadius: 8
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true, suggestedMax: 100 }
+        },
+        plugins: { legend: { display: false } }
+      }
+    });
+  }
+
+  // ===== نمودار Pie =====
+// ===== نمودار Pie (نسخه امن) =====
+if (pieCanvas) {
+ const hasPieData = pieVals.some(v => v > 0);
+
+new Chart(pieCanvas, {
+  type: "doughnut",
+  data: {
+    labels: ["پیش‌نویس","ارسال‌شده","تأییدشده"],
+    datasets: [{
+      data: hasPieData ? pieVals : [1,1,1],
+      backgroundColor: ["#fbbf24","#38bdf8","#22c55e"]
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: "60%",
+    plugins: {
+      legend: { position: "bottom" },
+      tooltip: {
+        callbacks: {
+          label: ctx =>
+            hasPieData
+              ? `${ctx.label}: ${ctx.raw}`
+              : "داده‌ای وجود ندارد"
+        }
+      }
+    }
+  }
+});
+
+}
+
+
+});
+</script>
+
+
+
+{% endblock %}

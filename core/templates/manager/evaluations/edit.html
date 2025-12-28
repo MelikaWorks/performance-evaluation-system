@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{{ eval_title }}{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="card">
+
+    <div class="eval-header">
+      <h2 class="eval-title">
+        ارزیابی {{ ev.employee_name }}
+        <span class="eval-meta">— فرم {{ ev.template.code }} • v{{ ev.template_version }}</span>
+      </h2>
+
+      <div class="eval-meta">
+        وضعیت: <strong>{{ ev.status|default:"draft" }}</strong>
+        &nbsp; | &nbsp;
+        امتیاز: <strong>{{ ev.final_score|default:"0" }}</strong> / {{ ev.max_score|default:"100" }}
+        {% if ev.final_percent %}<span> ({{ ev.final_percent }}%)</span>{% endif %}
+      </div>
+
+      {# پیام اشتباه قبلی حذف شد #}
+    </div>
+
+    {# پیام‌های مرحله گردش‌کار #}
+    {% if ev.status == WorkflowStatus.HR_REVIEW %}
+        <div class="alert alert-info" style="margin-bottom:12px;">
+            این فرم در مرحله <strong>بررسی HR</strong> است و قابل ویرایش نیست.
+        </div>
+    {% elif ev.status == WorkflowStatus.MANAGER_REVIEW %}
+        <div class="alert alert-warning" style="margin-bottom:12px;">
+            این فرم در مرحله <strong>بررسی مدیر واحد</strong> است.
+        </div>
+    {% elif ev.status == WorkflowStatus.FACTORY_REVIEW %}
+        <div class="alert alert-warning" style="margin-bottom:12px;">
+            این فرم در مرحله <strong>بررسی مدیر کارخانه</strong> است.
+        </div>
+    {% elif ev.status == WorkflowStatus.FINAL_APPROVED %}
+        <div class="alert alert-success" style="margin-bottom:12px;">
+            این فرم <strong>تأیید نهایی</strong> شده و فقط قابل مشاهده است.
+        </div>
+    {% endif %}
+
+      {% if signatures %}
+<div class="card" style="margin-bottom:12px;">
+    <h3 style="margin-bottom:8px;">سوابق تأیید</h3>
+    <ul style="font-size:13px;">
+        {% for s in signatures %}
+        <li>
+            {{ s.role }}
+            —
+            {{ s.evaluator.get_full_name|default:s.evaluator.username }}
+            —
+            {{ s.signed_at|date:"Y-m-d H:i" }}
+
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}
+
+
+
+
+    <!-- فرم اصلی -->
+    <form method="post" id="eval-form" novalidate>
+      {% csrf_token %}
+
+      <ol class="eval-list">
+        {% for it in items %}
+        <li class="eval-item">
+
+          <div class="label">
+            <strong>{{ it.criterion_title }}</strong>
+            {% if it.weight and it.weight|stringformat:"s" != "1" %}
+              <small class="muted">وزن: {{ it.weight }}</small>
+            {% endif %}
+          </div>
+
+          {% if it.criterion.description %}
+            <p class="eval-desc">{{ it.criterion.description }}</p>
+          {% endif %}
+
+          <div class="eval-options">
+            {% for opt in it.criterion.options.all %}
+              <label class="eval-option">
+                <input type="radio"
+                       name="item_{{ it.id }}"
+                       value="{{ opt.id }}"
+                       {% if it.selected_option_id == opt.id %}checked{% endif %}
+                       {% if read_only %}disabled{% endif %}>
+                <span>{{ opt.label }}</span>
+                <small>{{ opt.value }}</small>
+              </label>
+            {% endfor %}
+          </div>
+
+        </li>
+        {% endfor %}
+      </ol>
+
+<!-- دکمه‌ها برای گردش‌کار جدید -->
+<div class="eval-actions"
+     style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:16px;">
+
+ {# ================== ACTION BUTTONS ================== #}
+
+{% if ev.status == Evaluation.Status.DRAFT %}
+
+    {% if can_edit %}
+        <button type="submit" name="save_draft" class="btn btn-secondary">
+            ذخیره پیش‌نویس
+        </button>
+        <button type="submit" name="save_submit" class="btn btn-primary">
+            ذخیره و ارسال
+        </button>
+    {% endif %}
+
+{% elif ev.status == Evaluation.Status.SUBMITTED %}
+
+    {% if can_approve %}
+        <button type="submit" name="approve" value="1" class="btn btn-success">
+            تأیید HR و ارسال به مدیر کارخانه
+        </button>
+        <button type="submit" name="return" value="1" class="btn btn-warning">
+            بازگرداندن به پیش‌نویس
+        </button>
+    {% endif %}
+
+{% elif ev.status == Evaluation.Status.FACTORY_REVIEW %}
+
+    {% if can_approve %}
+        <button type="submit" name="approve" value="1" class="btn btn-success">
+            تأیید نهایی مدیر کارخانه
+        </button>
+        <button type="submit" name="return" value="1" class="btn btn-warning">
+            بازگرداندن به پیش‌نویس
+        </button>
+    {% endif %}
+
+{% endif %}
+
+  <a href="{% url 'eval_dashboard' %}" class="btn btn-link">بازگشت</a>
+</div>
+
+
+
+
+
+    </form>
+
+  </div>
+</div>
+
+<footer class="text-center text-muted" style="text-align:center;font-size:12px;margin-top:30px;">
+  © 2025 Development & Design by
+  <b><a href="mailto:melika.works@gmail.com">Melika Mehranpour</a></b> — All rights reserved.
+</footer>
+
+
+
+{% endblock %}

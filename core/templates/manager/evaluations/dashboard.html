@@ -1,0 +1,499 @@
+{% extends "admin/base_site.html" %}
+{% load static i18n %}
+{% block extrastyle %}
+{{ block.super }}
+<script src="{% static 'core/evaluations_ajax.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/fonts.css' %}">
+<link rel="stylesheet" href="{% static 'css/rtl.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" href="{% static 'css/dashboard_lists.css' %}">
+
+{% endblock %}
+{% block usertools %}
+{% if request.user.is_authenticated %}
+<div id="user-tools">
+    <span>{% trans "User:" %} {{ request.user.get_username }}</span>
+    | <a href="{% url 'eval_dashboard' %}">{% trans "Dashboard" %}</a>
+    |
+    <form method="post" action="{% url 'logout' %}" class="logout-form">
+        {% csrf_token %}
+        <button type="submit" class="logout-linklike">خروج</button>
+    </form>
+    | <a href="{% url 'password_change' %}">تغییر رمز عبور</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main" class="container-admin">
+    <div class="page-grid">
+
+        <!-- ستون اصلی -->
+        <div>
+
+            <!-- انتخاب فرم و بازه -->
+            <form method="get" action="{% url 'eval_dashboard' %}" class="module aligned" style="margin-bottom:12px;">
+                <h2>انتخاب فرم و بازه</h2>
+
+                <div class="form-row">
+                    <label><strong>فرم:</strong></label>
+                    <ul class="radiolist">
+                        {% for f in forms %}
+                        <li>
+                            <label>
+                                <input type="radio" name="form_code" value="{{ f.code }}" {% if selected_code == f.code%}checked{% endif %}>
+                                <strong>{{ f.code }}</strong> — {{ f.name }} ({{ f.criteria.count }} معیار)
+                            </label>
+                        </li>
+                        {% empty %}
+                        <li><em>فرمی برای نقش شما در دسترس نیست.</em></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+
+                <div class="form-row">
+                    <label><strong>بازه:</strong></label>
+                    <ul class="radiolist inline">
+                        {% for m in month_choices %}
+                        <li><label><input type="radio" name="months" value="{{ m }}" {% if months == m %}checked{%endif%}> {{ m }} ماهه</label></li>
+                        {% endfor %}
+                    </ul>
+                    <p class="help">از {{ period_start }} تا {{ period_end }}</p>
+                </div>
+
+                <div class="submit-row">
+                    <input type="submit" class="default" value="اعمال فیلتر">
+                </div>
+            </form>
+
+            <!-- کارت‌ها (آکاردئون) -->
+
+            <details class="card" {% if todo %}open{% endif %}>
+                <!-- To-Do -->
+                <summary>
+                    <span>
+                        <a class="hdr-link"
+                           href="{% url 'eval_list' 'todo' %}?form_code={{ selected_code }}&months={{ months }}">
+                            To-Do
+                        </a>
+                    </span>
+                    <span class="badge">{{ todo|length }}</span>
+                </summary>
+                <div class="card-body">
+                    {% if todo %}
+                    <table class="listing">
+                        <thead>
+                        <tr>
+                            <th>کد پرسنلی</th>
+                            <th>نام</th>
+                            <th>واحد</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for p in todo %}
+                        <tr>
+                            <td>{{ p.personnel_code }}</td>
+                            <td>{{ p.user.get_full_name|default:p.title|default:p.personnel_code }}</td>
+                            <td>{{ p.unit.unit_code }}</td>
+                            <td>
+                                <form method="post" action="{% url 'eval_create' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="form_code" value="{{ selected_code }}">
+                                    <input type="hidden" name="months" value="{{ months }}">
+                                    <button name="employee_id" value="{{ p.personnel_code }}" class="button">شروع
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    {% else %}
+                    <p class="help">موردی برای انجام نیست.</p>
+                    {% endif %}
+                </div>
+            </details>
+
+            <details class="card">
+                <!-- Draft -->
+                <summary>
+                    <span>
+                        <a class="hdr-link"
+                           href="{% url 'eval_list' 'draft' %}?form_code={{ selected_code }}&months={{ months }}">
+                            In-Progress (Draft)
+                        </a>
+                    </span>
+                    <span class="badge">{{ drafts|length }}</span>
+                </summary>
+
+                <div class="card-body">
+                    {% if drafts %}
+                    <ul>
+                        {% for e in drafts %}
+                        <li>
+                            <a href="{% url 'eval_edit' e.id %}">{{ e.employee_name }}</a>
+                            — {{ e.template.code }} ({{ e.period_start }} تا {{ e.period_end }})
+                            <span class="badge bg-secondary">{{ e.months_label }} ماهه</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="help">هیچ Draft فعالی وجود ندارد.</p>
+                    {% endif %}
+                </div>
+            </details>
+
+            <details class="card">
+                <!-- Submitted -->
+                <summary>
+                    <span>
+                        <a class="hdr-link"
+                           href="{% url 'eval_list' 'submitted' %}?form_code={{ selected_code }}&months={{ months }}">
+                            Submitted
+                        </a>
+                    </span>
+                    <span class="badge">{{ submitted|length }}</span>
+                </summary>
+                <div class="card-body">
+                    {% if submitted %}
+                    <ul>
+                        {% for e in submitted %}
+                        <li>
+                            <a href="{% url 'eval_edit' e.id %}">{{ e.employee_name }}</a>
+                            — امتیاز: {{ e.final_score }} / {{ e.max_score }}
+                            {% if e.final_percent %} ({{ e.final_percent|floatformat:0 }}٪){% endif %}
+                            {% if e.updated_at %} — ارسال: {{ e.updated_at|date:"Y-m-d H:i" }}{% endif %}
+                            <span class="badge bg-secondary">{{ e.months_label }} ماهه</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="help">موردی در وضعیت Submitted نیست.</p>
+                    {% endif %}
+                </div>
+            </details>
+
+            {% if manager %}
+<details class="card" open>
+    <summary>
+        <span>در انتظار اقدام من (تأیید)</span>
+        <span class="badge">{{ manager|length }}</span>
+    </summary>
+
+    <div class="card-body">
+        <ul>
+            {% for row in manager %}
+            <li style="display:flex;align-items:center;gap:12px;">
+                <a href="{% url 'eval_edit' row.ev.id %}">
+                    {{ row.ev.employee_name }}
+                </a>
+
+                <span class="badge bg-secondary">
+                    {{ row.current_step }}
+                </span>
+
+                {% if row.can_approve %}
+                <form method="post"
+                      action="{% url 'eval_approve' row.ev.id %}"
+                      style="margin-right:auto;">
+                    {% csrf_token %}
+                    <button class="button button-success">
+                        تأیید
+                    </button>
+                </form>
+                {% endif %}
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</details>
+{% endif %}
+
+
+
+            <details class="card">
+                <!-- Approved -->
+                <summary>
+                    <span>
+                        <a class="hdr-link"
+                           href="{% url 'eval_list' 'approved' %}?form_code={{ selected_code }}&months={{ months }}">
+                            Approved
+                        </a>
+                    </span>
+                    <span class="badge">{{ approved|length }}</span>
+                </summary>
+
+                <div class="card-body">
+                    {% if approved %}
+                    <ul>
+                        {% for e in approved %}
+                        <li>
+                            {{ e.period_label }} —
+                            {% if e.employee_name %}{{ e.employee_name }}{% else %}کاربر نامشخص{% endif %}
+                            — امتیاز: {{ e.final_score|default:"0" }} / {{ e.max_score|default:"0" }}
+                            <span class="badge bg-secondary">{{ e.months_label }} ماهه</span>
+                            {% if e.id %}
+                            <a href="{% url 'eval_print_evaluation' e.id %}" target="_blank" class="button" style="margin-right: 6px; font-size: 11px; padding: 2px 6px; background: #7c3aed; color: #fff; border-radius: 4px;">
+                                🖨 چاپ
+                            </a>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+
+                    {% else %}
+                    <p class="help">هنوز ارزیابی تاییدشده در این بازه ندارید.</p>
+                    {% endif %}
+                </div>
+
+
+            </details>
+            <fieldset>
+                <details class="card">
+                    <summary>
+                        <span>Draftهای مانده/منقضی</span>
+                        <span class="badge">{{ stale_drafts|length }}</span>
+                    </summary>
+                    <div class="card-body">
+                        {% if stale_drafts %}
+                        <form id="bulk-archive-form" method="post" action="{% url 'eval_bulk_archive' %}">
+                            {% csrf_token %}
+                            <table class="listing">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <input type="checkbox" id="masterChk">
+                                    </th>
+                                    <th>نام</th>
+                                    <th>فرم</th>
+                                    <th>بازه</th>
+                                    <th>وضعیت</th>
+                                    <th>علت</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for e in stale_drafts %}
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="stale-chk" name="ids" value="{{ e.id }}" {% if e.status != 'expired' or e.is_archived %}disabled
+                                               title="فقط فرم‌های منقضی قابل انتخاب هستند" {% endif %}>
+                                    </td>
+                                    <td><a href="{% url 'eval_edit' e.id %}">{{ e.employee_name }}</a></td>
+                                    <td>{{ e.template.code }}</td>
+                                    <td style="font-size:12px;">{{ e.period_start }} تا {{ e.period_end }}</td>
+                                    <!-- <td>{{ e.status }}</td>-->
+                                    <td><span class="badge bg-secondary" style="font-size:xx-small;">{{ e.months_label }} ماهه</span>
+                                    </td>
+                                    <td style="font-size:10px;">
+                                        {% if e.visible_until and e.visible_until < now %}منقضی{% endif %}
+                                        {% if e.missing_count %}{% if e.visible_until and e.visible_until < now %}، {% endif %}ناتمام ({{ e.missing_count }}){% endif %}
+                                    </td>
+                                    <td>
+                                        <a class="button" href="{% url 'eval_edit' e.id %}"><span style="font-size:10px;">بازکردن</span></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                            <div class="submit-row">
+                                <button id="bulk-archive-btn" type="submit" class="button" disabled>آرشیو
+                                    انتخاب‌شده‌ها
+                                </button>
+                            </div>
+                        </form>
+                        {% if request.user.is_superuser %}
+                        <form method="post" action="{% url 'eval_bulk_delete' %}"
+                              onsubmit="return confirm('حذف دائم؟')">
+                            {% csrf_token %}
+                            {% for e in stale_drafts %}
+                            <input type="hidden" name="ids" value="{{ e.id }}">
+                            {% endfor %}
+                            <div class="submit-row">
+                                <button type="submit" class="deletelink">حذف دائم همه این‌ها (فقط سوپریوزر)</button>
+                            </div>
+                        </form>
+                        {% endif %}
+                        {% else %}
+                        <p class="help">پیش‌نویس منقضی/ناتمامی ندارید.</p>
+                        {% endif %}
+                    </div>
+                </details>
+            </fieldset>
+        </div>
+
+        <!-- سایدبار (ویجت‌ها) -->
+        <aside>
+            <fieldset class="module">
+                <h2>خلاصه</h2>
+                <ul>
+                    <li>کل افراد هدف: {{todo|length}}</li>
+                    <li>در حال انجام: {{drafts|length}}</li>
+                    <li>ارسال‌شده: {{submitted|length}}</li>
+                    <li>تأییدشده: {{approved|length}}</li>
+                </ul>
+            </fieldset>
+             <fieldset class="module">
+                <h2> مدیریت لیست‌ها</h2>
+              <ul class="menu-list">
+    <li>
+        <a href="{% url 'manager_evaluations_drafts' %}">
+            <span class="list-badge badge-draft">{{ count_draft }}</span>
+            لیست پیش‌نویس‌ها (Draft)
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'manager_evaluations_submitted' %}">
+            <span class="list-badge badge-submitted">{{ count_submitted }}</span>
+            لیست ارسال‌شده‌ها (Submitted)
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'manager_evaluations_approved' %}">
+            <span class="list-badge badge-approved">{{ count_final }}</span>
+            لیست تایید‌شده‌ها (Approved)
+        </a>
+    </li>
+
+    <li>
+        <a href="{% url 'manager_evaluations_archived' %}">
+            <span class="list-badge badge-archived">{{ count_archived }}</span>
+            لیست آرشیوشده‌ها (Archived)
+        </a>
+    </li>
+</ul>
+
+            </fieldset>
+
+
+
+<fieldset class="module">
+    <h2>گزارش‌ها و نمودارها</h2>
+
+    <div class="card dashboard-card">
+        <a href="{% url 'eval_reports' %}">
+            📊 مشاهده گزارش عملکرد
+        </a>
+        <br>
+
+        <a href="{% url 'manager:manager_summary_report' %}">
+            📊 گزارش تجمیعی مدیران
+        </a>
+        <br>
+
+        <a href="{% url 'manager:workflow' %}">
+            🔄 مشاهده گردش کار ارزیابی
+
+            {% if hr_pending_count %}
+                <span class="badge">{{ hr_pending_count }}</span>
+            {% endif %}
+
+            {% if factory_pending_count %}
+                <span class="badge">{{ factory_pending_count }}</span>
+            {% endif %}
+        </a>
+    </div>
+</fieldset>
+
+
+
+            <fieldset class="module">
+                <h2>آخرین ارسال‌ها</h2>
+                {% if recent_submitted %}
+                <ul>
+                    {% for e in recent_submitted %}
+                    <li>
+                        <a href="{% url 'eval_edit' e.id %}" style="text-decoration:underline;">{{ e.employee_name }}</a>
+                        — امتیاز: {{ e.final_score }} / {{ e.max_score }}
+                        {% if e.final_percent %} ({{ e.final_percent|floatformat:0 }}٪){% endif %}
+                        <span class="badge bg-secondary" style="font-size:xx-small;">{{ e.months_label }} ماهه</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="help">ارسال اخیر ندارید.</p>
+                {% endif %}
+            </fieldset>
+
+            <fieldset class="module">
+                <h2>آرشیوشده‌های اخیر</h2>
+                {% if archived_recent %}
+                <ul class="last-list">
+                    {% for e in archived_recent %}
+                    <li>
+                        <span class="dot dot-archived" aria-hidden="true"></span>
+                        {{ e.employee_name }} — {{ e.template.code }}
+                        <span class="muted">({{ e.period_start }} تا {{ e.period_end }})</span>
+                        </br>
+                        <span class="badge bg-secondary" style="font-size:xx-small;">{{ e.months_label }} ماهه</span>
+                        <a href="{% url 'eval_edit' e.id %}" class="link">بازکردن</a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <p class="help">مورد آرشیوشدهٔ اخیر ندارید.</p>
+                {% endif %}
+            </fieldset>
+        </aside>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('bulk-archive-form');
+      const btn = document.getElementById('bulk-archive-btn');
+      const master = document.getElementById('masterChk');
+
+      // اگه فرم یا دکمه وجود نداره، هیچی انجام نده
+      if (!form || !btn) return;
+
+      // 🎯 تابع بررسی فعال بودن دکمه
+      const refreshBtn = () => {
+        const anyChecked = form.querySelector('input.stale-chk:not([disabled]):checked');
+        const hasChecked = Boolean(anyChecked);
+
+        btn.disabled = !hasChecked;
+        btn.classList.toggle('disabled', !hasChecked);
+
+        // اگه دکمه غیرفعاله، شفاف‌ترش کنیم برای زیبایی
+        btn.style.opacity = hasChecked ? "1" : "0.6";
+        btn.style.cursor = hasChecked ? "pointer" : "not-allowed";
+      };
+
+      // 🧩 تابع تیک زدن همه (فقط موارد فعال)
+      if (master) {
+        master.addEventListener('change', () => {
+          const enabledChecks = form.querySelectorAll('input.stale-chk:not([disabled])');
+          enabledChecks.forEach(ch => ch.checked = master.checked);
+          refreshBtn();
+        });
+      }
+
+      // 🎯 وقتی یکی از چک‌باکس‌ها تغییر کرد → دکمه بررسی بشه
+      form.addEventListener('change', e => {
+        if (e.target && e.target.matches('input.stale-chk')) {
+          refreshBtn();
+
+          // اگر همه‌ی چک‌باکس‌های فعال تیک خوردن، مستر رو هم تیک بزن
+          const enabled = form.querySelectorAll('input.stale-chk:not([disabled])');
+          const checked = form.querySelectorAll('input.stale-chk:not([disabled]):checked');
+          if (master) master.checked = enabled.length === checked.length && enabled.length > 0;
+        }
+      });
+
+      // 🟢 بار اول که صفحه لود میشه
+      refreshBtn();
+    });
+</script>
+
+{% endblock %}
+
+
+
+

@@ -1,0 +1,1 @@
+# core/views/manager/__init__.py
