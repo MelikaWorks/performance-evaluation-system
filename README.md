@@ -51,7 +51,7 @@ Project lifecycle was managed using **Azure DevOps**, including backlog tracking
 Senior Software Engineer | Backend & Enterprise Systems  
 Python (Django) • PostgreSQL • System Design • Agile
 
-🔗 [LinkedIn]([https://www.linkedin.com/in/melika-mehranpour-41b627161/]) | [GitHub](https://github.com/MelikaWorks)
+🔗 [LinkedIn](https://www.linkedin.com/in/melika-mehranpour-41b627161/) | [GitHub](https://github.com/MelikaWorks)
 
 ## License
 See `LICENSE` for license information.
