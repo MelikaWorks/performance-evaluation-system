@@ -5,7 +5,7 @@ A web-based performance evaluation platform built with Django, designed for mult
 ## Key Features
 - Multi-organization scoping (Holding, Factory, DepartmentGroup)
 - Role-based access for Admins and Managers
-- Evaluation workflow & approval states (signatures and audit-ready structure)
+- Evaluation workflow and approval states (signatures and audit-ready structure)
 - Manager dashboards and reports (including print-friendly views)
 - CSV / PDF / Print-ready reporting paths
 - Structured import and maintenance scripts
