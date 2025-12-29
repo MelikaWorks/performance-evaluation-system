@@ -15,6 +15,8 @@ A web-based performance evaluation platform built with Django, designed for mult
 - PostgreSQL (intended for production)
 - HTML, CSS, JavaScript (server-rendered templates)
 - Chart.js for reporting visuals
+- SharePoint Lists, Libraries, and Custom Views
+- Portfolio & Resource Management Concepts
 
 ## Repository Structure
 - `core/` – Main application logic (models, views, approvals, workflow, templates, static files)
