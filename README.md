@@ -54,6 +54,5 @@ Python (Django) • PostgreSQL • System Design • Agile
 🔗 [LinkedIn](https://www.linkedin.com/in/melika-mehranpour-41b627161/) | [GitHub](https://github.com/MelikaWorks)
 
 ## License
-See `LICENSE` for license information.
 See the [LICENSE](LICENSE) file for license information.
 
