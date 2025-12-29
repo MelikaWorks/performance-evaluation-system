@@ -22,6 +22,9 @@ A web-based performance evaluation platform built with Django, designed for mult
 - `scripts/` – Utility scripts for imports, analysis, and maintenance
 - `docs/` – Technical documentation and design notes
 
+### Database Design
+The database schema is defined and managed through Django models and migrations, ensuring consistency across environments.
+
 ## Local Setup
 1. Create and activate a virtual environment
 
