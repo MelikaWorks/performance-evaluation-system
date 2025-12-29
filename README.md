@@ -55,3 +55,5 @@ Python (Django) • PostgreSQL • System Design • Agile
 
 ## License
 See `LICENSE` for license information.
+See the [LICENSE](LICENSE) file for license information.
+
