@@ -105,7 +105,7 @@ if employee.job_level_code == 900:
 if employee.unit_code == 218:
     # IT department logic
     ...
-
+```
 By using stable internal codes instead of raw text values, the system becomes easier to maintain, safer for workflow and permission logic, and more scalable for future organizational and multi-company changes.
 
 
