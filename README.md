@@ -22,10 +22,17 @@ A web-based performance evaluation platform built with Django, designed for mult
 
 ### Login
 
-![Personnel Login](screenshots/01_Personnel_Login.png)
+![Personnel Login]
+<p align="center">
+  <img src="screenshots/01_Personnel_Login.png" width="500">
+</p>
+
 *Personnel Login*
 
-![Admin Login](screenshots/02_Admin_Login.png)
+![Admin Login]
+<p align="center">
+  <img src="screenshots/02_Admin_Login.png" width="500">
+</p>
 *Admin Login*
 
 ---
@@ -33,41 +40,71 @@ A web-based performance evaluation platform built with Django, designed for mult
 ### Manager Dashboard
 
 ![Managers Dashboard](screenshots/03_Managers_Dashboard.png)
+<p align="center">
+  <img src="screenshots/02_Admin_Login.png" width="500">
+</p>
 *Managers Dashboard*
 
 ![Department Score Chart](screenshots/12_Department_Score_Chart.png)
+<p align="center">
+  <img src="screenshots/02_Admin_Login.png" width="500">
+</p>
 *Department Score Chart*
 
 ---
 
 ### Workflow & Evaluation
 
-![Performance Evaluation Form](screenshots/06_Performance_Evaluation_Form.png)
+![Performance Evaluation Form]
+<p align="center">
+  <img src="screenshots/06_Performance_Evaluation_Form.png" width="500">
+</p>
 *Performance Evaluation Form*
 
-![Workflow and Approval Process](screenshots/14_Workflow_And_Approval_Process.png)
+![Workflow and Approval Process]
+<p align="center">
+  <img src="screenshots/14_Workflow_And_Approval_Process.png" width="500">
+</p>
 *Workflow and Approval Process*
 
-![Workflow Form Print and Signatures](screenshots/23_Workflow_Form_Print_And_Signatures.png)
+![Workflow Form Print and Signatures]
+<p align="center">
+  <img src="screenshots/23_Workflow_Form_Print_And_Signatures.png" width="500">
+</p>
 *Workflow Form Print and Signatures*
 
 ---
 
 ### Administration Panel
 
-![System Administration Panel](screenshots/16_System_Administration_Panel.png)
+![System Administration Panel]
+<p align="center">
+  <img src="screenshots/16_System_Administration_Panel.png" width="500">
+</p>
 *System Administration Panel*
 
-![Personnel Management in Admin Panel](screenshots/17_Personnel_Management_In_Admin_Panel.png)
+![Personnel Management in Admin Panel]
+<p align="center">
+  <img src="screenshots/17_Personnel_Management_In_Admin_Panel.png" width="500">
+</p>
 *Personnel Management in Admin Panel*
 
-![Evaluation Forms Management](screenshots/18_Evaluation_Forms_Management_In_Admin_Panel.png)
+![Evaluation Forms Management]
+<p align="center">
+  <img src="screenshots/18_Evaluation_Forms_Management_In_Admin_Panel.png" width="500">
+</p>
 *Evaluation Forms Management*
 
-![Job Role Management](screenshots/21_Job_Role_Management_In_Admin_Panel.png)
+![Job Role Management]
+<p align="center">
+  <img src="screenshots/21_Job_Role_Management_In_Admin_Panel.png" width="500">
+</p>
 *Job Role Management*
 
-![Multi-Organization Management](screenshots/22_Multi_Organization_Management_In_Admin_Panel.png)
+![Multi-Organization Management]
+<p align="center">
+  <img src="screenshots/22_Multi_Organization_Management_In_Admin_Panel.png" width="500">
+</p>
 *Multi-Organization Management*
 
 ## Repository Structure
