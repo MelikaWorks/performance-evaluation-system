@@ -102,7 +102,7 @@ The project lifecycle was organized into seven phases, including architecture, i
 <br>
 
 <p align="center">
-  <img src="screenshots/azure/03_azure-project-phases.jpg" width="45%">
+  <img src="screenshots/azure/03-azure-project-phases.jpg" width="45%">
   <img src="screenshots/azure/04_azure-backlog.jpg" width="45%">
 </p>
 
