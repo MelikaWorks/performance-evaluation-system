@@ -67,7 +67,7 @@ A web-based performance evaluation platform built with Django, designed for mult
 <p align="center"><sub>Workflow and Approval Process</sub></p>
 
 <p align="center">
-  <img src="screenshots/23_Workflow_Form_Print_And_Signatures.png" width="400">
+  <img src="screenshots/10_2_Workflow_Form_Print_And_Signatures" width="400">
 </p>
 
 <p align="center"><sub>Workflow Form Print and Signatures</sub></p>
