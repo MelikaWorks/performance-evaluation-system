@@ -23,13 +23,13 @@ A web-based performance evaluation platform built with Django, designed for mult
 ### Login
 
 <p align="center">
-  <img src="screenshots/01_Personnel_Login.png" width="300">
+  <img src="screenshots/app/01_Personnel_Login.png" width="300">
 </p>
 
 <p align="center"><sub>Personnel Login</sub></p>
 
 <p align="center">
-  <img src="screenshots/02_Admin_Login.png" width="300">
+  <img src="screenshots/app/02_Admin_Login.png" width="300">
 </p>
 
 <p align="center"><sub>Admin Login</sub></p>
@@ -39,13 +39,13 @@ A web-based performance evaluation platform built with Django, designed for mult
 ### Manager Dashboard
 
 <p align="center">
-  <img src="screenshots/03_Managers_Dashboard.png" width="500">
+  <img src="screenshots/app/03_Managers_Dashboard.png" width="500">
 </p>
 
 <p align="center"><sub>Managers Dashboard</sub></p>
 
 <p align="center">
-  <img src="screenshots/12_Department_Score_Chart.png" width="400">
+  <img src="screenshots/app/12_Department_Score_Chart.png" width="400">
 </p>
 
 <p align="center"><sub>Department Score Chart</sub></p>
@@ -55,19 +55,19 @@ A web-based performance evaluation platform built with Django, designed for mult
 ### Workflow & Evaluation
 
 <p align="center">
-  <img src="screenshots/06_Performance_Evaluation_Form.png" width="400">
+  <img src="screenshots/app/06_Performance_Evaluation_Form.png" width="400">
 </p>
 
 <p align="center"><sub>Performance Evaluation Form</sub></p>
 
 <p align="center">
-  <img src="screenshots/14_Workflow_And_Approval_Process.png" width="400">
+  <img src="screenshots/app/14_Workflow_And_Approval_Process.png" width="400">
 </p>
 
 <p align="center"><sub>Workflow and Approval Process</sub></p>
 
 <p align="center">
-  <img src="screenshots/10_2_Workflow_Form_Print_And_Signatures.png" width="400">
+  <img src="screenshots/app/10_2_Workflow_Form_Print_And_Signatures.png" width="400">
 </p>
 
 <p align="center"><sub>Workflow Form Print and Signatures</sub></p>
@@ -77,31 +77,31 @@ A web-based performance evaluation platform built with Django, designed for mult
 ### Administration Panel
 
 <p align="center">
-  <img src="screenshots/16_System_Administration_Panel.png" width="400">
+  <img src="screenshots/app/16_System_Administration_Panel.png" width="400">
 </p>
 
 <p align="center"><sub>System Administration Panel</sub></p>
 
 <p align="center">
-  <img src="screenshots/17_Personnel_Management_In_Admin_Panel.png" width="400">
+  <img src="screenshots/app/17_Personnel_Management_In_Admin_Panel.png" width="400">
 </p>
 
 <p align="center"><sub>Personnel Management in Admin Panel</sub></p>
 
 <p align="center">
-  <img src="screenshots/18_Evaluation_Forms_Management_In_Admin_Panel.png" width="400">
+  <img src="screenshots/app/18_Evaluation_Forms_Management_In_Admin_Panel.png" width="400">
 </p>
 
 <p align="center"><sub>Evaluation Forms Management</sub></p>
 
 <p align="center">
-  <img src="screenshots/21_Job_Role_Management_In_Admin_Panel.png" width="400">
+  <img src="screenshots/app/21_Job_Role_Management_In_Admin_Panel.png" width="400">
 </p>
 
 <p align="center"><sub>Job Role Management</sub></p>
 
 <p align="center">
-  <img src="screenshots/22_Multi_Organization_Management_In_Admin_Panel.png" width="400">
+  <img src="screenshots/app/22_Multi_Organization_Management_In_Admin_Panel.png" width="400">
 </p>
 
 <p align="center"><sub>Multi-Organization Management</sub></p>
