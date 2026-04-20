@@ -22,90 +22,90 @@ A web-based performance evaluation platform built with Django, designed for mult
 
 ### Login
 
-![Personnel Login]
 <p align="center">
-  <img src="screenshots/01_Personnel_Login.png" width="500">
+  <img src="screenshots/01_Personnel_Login.png" width="300">
 </p>
 
-*Personnel Login*
+<p align="center"><sub>Personnel Login</sub></p>
 
-![Admin Login]
 <p align="center">
-  <img src="screenshots/02_Admin_Login.png" width="500">
+  <img src="screenshots/02_Admin_Login.png" width="300">
 </p>
-*Admin Login*
+
+<p align="center"><sub>Admin Login</sub></p>
 
 ---
 
 ### Manager Dashboard
 
-![Managers Dashboard](screenshots/03_Managers_Dashboard.png)
 <p align="center">
-  <img src="screenshots/02_Admin_Login.png" width="500">
+  <img src="screenshots/03_Managers_Dashboard.png" width="500">
 </p>
-*Managers Dashboard*
 
-![Department Score Chart](screenshots/12_Department_Score_Chart.png)
+<p align="center"><sub>Managers Dashboard</sub></p>
+
 <p align="center">
-  <img src="screenshots/02_Admin_Login.png" width="500">
+  <img src="screenshots/12_Department_Score_Chart.png" width="400">
 </p>
-*Department Score Chart*
+
+<p align="center"><sub>Department Score Chart</sub></p>
 
 ---
 
 ### Workflow & Evaluation
 
-![Performance Evaluation Form]
 <p align="center">
-  <img src="screenshots/06_Performance_Evaluation_Form.png" width="500">
+  <img src="screenshots/06_Performance_Evaluation_Form.png" width="400">
 </p>
-*Performance Evaluation Form*
 
-![Workflow and Approval Process]
-<p align="center">
-  <img src="screenshots/14_Workflow_And_Approval_Process.png" width="500">
-</p>
-*Workflow and Approval Process*
+<p align="center"><sub>Performance Evaluation Form</sub></p>
 
-![Workflow Form Print and Signatures]
 <p align="center">
-  <img src="screenshots/23_Workflow_Form_Print_And_Signatures.png" width="500">
+  <img src="screenshots/14_Workflow_And_Approval_Process.png" width="400">
 </p>
-*Workflow Form Print and Signatures*
+
+<p align="center"><sub>Workflow and Approval Process</sub></p>
+
+<p align="center">
+  <img src="screenshots/23_Workflow_Form_Print_And_Signatures.png" width="400">
+</p>
+
+<p align="center"><sub>Workflow Form Print and Signatures</sub></p>
 
 ---
 
 ### Administration Panel
 
-![System Administration Panel]
 <p align="center">
-  <img src="screenshots/16_System_Administration_Panel.png" width="500">
+  <img src="screenshots/16_System_Administration_Panel.png" width="400">
 </p>
-*System Administration Panel*
 
-![Personnel Management in Admin Panel]
-<p align="center">
-  <img src="screenshots/17_Personnel_Management_In_Admin_Panel.png" width="500">
-</p>
-*Personnel Management in Admin Panel*
+<p align="center"><sub>System Administration Panel</sub></p>
 
-![Evaluation Forms Management]
 <p align="center">
-  <img src="screenshots/18_Evaluation_Forms_Management_In_Admin_Panel.png" width="500">
+  <img src="screenshots/17_Personnel_Management_In_Admin_Panel.png" width="400">
 </p>
-*Evaluation Forms Management*
 
-![Job Role Management]
-<p align="center">
-  <img src="screenshots/21_Job_Role_Management_In_Admin_Panel.png" width="500">
-</p>
-*Job Role Management*
+<p align="center"><sub>Personnel Management in Admin Panel</sub></p>
 
-![Multi-Organization Management]
 <p align="center">
-  <img src="screenshots/22_Multi_Organization_Management_In_Admin_Panel.png" width="500">
+  <img src="screenshots/18_Evaluation_Forms_Management_In_Admin_Panel.png" width="400">
 </p>
-*Multi-Organization Management*
+
+<p align="center"><sub>Evaluation Forms Management</sub></p>
+
+<p align="center">
+  <img src="screenshots/21_Job_Role_Management_In_Admin_Panel.png" width="400">
+</p>
+
+<p align="center"><sub>Job Role Management</sub></p>
+
+<p align="center">
+  <img src="screenshots/22_Multi_Organization_Management_In_Admin_Panel.png" width="400">
+</p>
+
+<p align="center"><sub>Multi-Organization Management</sub></p>
+
 
 ## Repository Structure
 - `core/` – Main application logic (models, views, approvals, workflow, templates, static files)
