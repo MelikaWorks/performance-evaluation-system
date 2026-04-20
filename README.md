@@ -47,7 +47,7 @@ A web-based performance evaluation platform built with Django, designed for mult
   <img src="screenshots/app/14_Workflow_And_Approval_Process.png" width="400">
 </p>
 
-<p align="center"><sub>Performance Evaluation Form</sub>|<sub>Workflow and Approval Process</sub></p>
+<p align="center"><sub>Performance Evaluation Form</sub> | <sub>Workflow and Approval Process</sub></p>
 
 
 <p align="center">
@@ -221,8 +221,6 @@ By using stable internal codes instead of raw text values, the system becomes ea
 - Sensitive data and local artifacts are excluded using `.gitignore`
 - The project follows a clean commit history and modular structure
 
-## Project Management
-Project lifecycle was managed using **Azure DevOps**, including backlog tracking, task breakdown, and release coordination.
 
 ## Author
 
