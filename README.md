@@ -24,15 +24,9 @@ A web-based performance evaluation platform built with Django, designed for mult
 
 <p align="center">
   <img src="screenshots/app/01_Personnel_Login.png" width="300">
-</p>
-
-<p align="center"><sub>Personnel Login</sub></p>
-
-<p align="center">
   <img src="screenshots/app/02_Admin_Login.png" width="300">
 </p>
-
-<p align="center"><sub>Admin Login</sub></p>
+<p align="center"><sub>Personnel Login</sub> | <sub>Admin Login</sub></p>
 
 ---
 
@@ -40,15 +34,9 @@ A web-based performance evaluation platform built with Django, designed for mult
 
 <p align="center">
   <img src="screenshots/app/03_Managers_Dashboard.png" width="500">
+   <img src="screenshots/app/12_Department_Score_Chart.png" width="400">
 </p>
-
-<p align="center"><sub>Managers Dashboard</sub></p>
-
-<p align="center">
-  <img src="screenshots/app/12_Department_Score_Chart.png" width="400">
-</p>
-
-<p align="center"><sub>Department Score Chart</sub></p>
+<p align="center"><sub>Managers Dashboard</sub> | <sub>Department Score Chart</sub></p>
 
 ---
 
@@ -56,15 +44,11 @@ A web-based performance evaluation platform built with Django, designed for mult
 
 <p align="center">
   <img src="screenshots/app/06_Performance_Evaluation_Form.png" width="400">
-</p>
-
-<p align="center"><sub>Performance Evaluation Form</sub></p>
-
-<p align="center">
   <img src="screenshots/app/14_Workflow_And_Approval_Process.png" width="400">
 </p>
 
-<p align="center"><sub>Workflow and Approval Process</sub></p>
+<p align="center"><sub>Performance Evaluation Form</sub>|<sub>Workflow and Approval Process</sub></p>
+
 
 <p align="center">
   <img src="screenshots/app/10_2_Workflow_Form_Print_And_Signatures.png" width="400">
@@ -78,27 +62,18 @@ A web-based performance evaluation platform built with Django, designed for mult
 
 <p align="center">
   <img src="screenshots/app/16_System_Administration_Panel.png" width="400">
+   <img src="screenshots/app/17_Personnel_Management_In_Admin_Panel.png" width="400">
 </p>
 
-<p align="center"><sub>System Administration Panel</sub></p>
+<p align="center"><sub>System Administration Panel</sub> | <sub>Personnel Management in Admin Panel</sub></p>
 
-<p align="center">
-  <img src="screenshots/app/17_Personnel_Management_In_Admin_Panel.png" width="400">
-</p>
-
-<p align="center"><sub>Personnel Management in Admin Panel</sub></p>
 
 <p align="center">
   <img src="screenshots/app/18_Evaluation_Forms_Management_In_Admin_Panel.png" width="400">
-</p>
-
-<p align="center"><sub>Evaluation Forms Management</sub></p>
-
-<p align="center">
   <img src="screenshots/app/21_Job_Role_Management_In_Admin_Panel.png" width="400">
 </p>
 
-<p align="center"><sub>Job Role Management</sub></p>
+<p align="center"><sub>Evaluation Forms Management</sub> | <sub>Job Role Management</sub></p>
 
 <p align="center">
   <img src="screenshots/app/22_Multi_Organization_Management_In_Admin_Panel.png" width="400">
@@ -106,6 +81,34 @@ A web-based performance evaluation platform built with Django, designed for mult
 
 <p align="center"><sub>Multi-Organization Management</sub></p>
 
+
+## Azure DevOps Project Management
+
+During development, the project was managed in Azure DevOps using Boards, Work Items, Epics, and phase-based planning.
+
+The project lifecycle was organized into seven phases, including architecture, implementation, testing, reporting, UI improvements, and DevOps finalization.
+
+### Azure DevOps Screenshots
+
+<p align="center">
+  <img src="screenshots/azure/azure-work-items.png" width="45%">
+  <img src="screenshots/azure/azure-board-overview.png" width="45%">
+</p>
+
+<p align="center">
+  <sub>Work Items &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Board Overview</sub>
+</p>
+
+<br>
+
+<p align="center">
+  <img src="screenshots/azure/azure-project-phases.png" width="45%">
+  <img src="screenshots/azure/azure-backlog.png" width="45%">
+</p>
+
+<p align="center">
+  <sub>Project Phases &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp; Backlog & Planning</sub>
+</p>
 
 ## Repository Structure
 - `core/` – Main application logic (models, views, approvals, workflow, templates, static files)
