@@ -91,8 +91,8 @@ The project lifecycle was organized into seven phases, including architecture, i
 ### Azure DevOps Screenshots
 
 <p align="center">
-  <img src="screenshots/azure/azure-work-items.png" width="45%">
-  <img src="screenshots/azure/azure-board-overview.png" width="45%">
+  <img src="screenshots/azure/01_azure-work-items.png" width="45%">
+  <img src="screenshots/azure/02_azure-board-overview.png" width="45%">
 </p>
 
 <p align="center">
@@ -102,8 +102,8 @@ The project lifecycle was organized into seven phases, including architecture, i
 <br>
 
 <p align="center">
-  <img src="screenshots/azure/azure-project-phases.png" width="45%">
-  <img src="screenshots/azure/azure-backlog.png" width="45%">
+  <img src="screenshots/azure/03_azure-project-phases.png" width="45%">
+  <img src="screenshots/azure/04_azure-backlog.png" width="45%">
 </p>
 
 <p align="center">
