@@ -18,6 +18,58 @@ A web-based performance evaluation platform built with Django, designed for mult
 - SharePoint Lists, Libraries, and Custom Views
 - Portfolio & Resource Management Concepts
 
+## Screenshots
+
+### Login
+
+![Personnel Login](screenshots/01_Personnel_Login.png)
+*Personnel Login*
+
+![Admin Login](screenshots/02_Admin_Login.png)
+*Admin Login*
+
+---
+
+### Manager Dashboard
+
+![Managers Dashboard](screenshots/03_Managers_Dashboard.png)
+*Managers Dashboard*
+
+![Department Score Chart](screenshots/12_Department_Score_Chart.png)
+*Department Score Chart*
+
+---
+
+### Workflow & Evaluation
+
+![Performance Evaluation Form](screenshots/06_Performance_Evaluation_Form.png)
+*Performance Evaluation Form*
+
+![Workflow and Approval Process](screenshots/14_Workflow_And_Approval_Process.png)
+*Workflow and Approval Process*
+
+![Workflow Form Print and Signatures](screenshots/23_Workflow_Form_Print_And_Signatures.png)
+*Workflow Form Print and Signatures*
+
+---
+
+### Administration Panel
+
+![System Administration Panel](screenshots/16_System_Administration_Panel.png)
+*System Administration Panel*
+
+![Personnel Management in Admin Panel](screenshots/17_Personnel_Management_In_Admin_Panel.png)
+*Personnel Management in Admin Panel*
+
+![Evaluation Forms Management](screenshots/18_Evaluation_Forms_Management_In_Admin_Panel.png)
+*Evaluation Forms Management*
+
+![Job Role Management](screenshots/21_Job_Role_Management_In_Admin_Panel.png)
+*Job Role Management*
+
+![Multi-Organization Management](screenshots/22_Multi_Organization_Management_In_Admin_Panel.png)
+*Multi-Organization Management*
+
 ## Repository Structure
 - `core/` – Main application logic (models, views, approvals, workflow, templates, static files)
 - `project/` – Django project configuration (settings, URLs, WSGI/ASGI)
