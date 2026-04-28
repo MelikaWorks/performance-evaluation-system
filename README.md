@@ -1,6 +1,18 @@
 # Performance Evaluation System (Django)
 
 A web-based performance evaluation platform built with Django, designed for multi-organization environments (holding / factory / department groups) with role-based access, workflow approvals, and manager/admin reporting.
+This project is designed based on SaaS architecture principles for multi-organization environments.
+
+## SaaS Architecture Highlights
+
+This system is designed following SaaS architecture principles:
+
+- Multi-tenant structure (Holding / Factory / Department Group)
+- Data isolation between organizations
+- Role-based access control (Admin / Manager / Employee)
+- Web-based system accessible without installation
+- Scalable reporting and evaluation workflows
+- Designed for enterprise environments with multiple organizational units
 
 ## Key Features
 - Multi-organization scoping (Holding, Factory, DepartmentGroup)
