@@ -5,14 +5,17 @@ This project is designed based on SaaS architecture principles for multi-organiz
 
 ## SaaS Architecture Highlights
 
-This system is designed following SaaS architecture principles:
+Key SaaS architecture aspects implemented in this system:
 
 - Multi-tenant structure (Holding / Factory / Department Group)
 - Data isolation between organizations
+- Organization-based data scoping and access filtering
 - Role-based access control (Admin / Manager / Employee)
-- Web-based system accessible without installation
+- Fully web-based platform (no installation required)
+- Workflow-driven evaluation and approval engine
 - Scalable reporting and evaluation workflows
 - Designed for enterprise environments with multiple organizational units
+
 
 ## Key Features
 - Multi-organization scoping (Holding, Factory, DepartmentGroup)
